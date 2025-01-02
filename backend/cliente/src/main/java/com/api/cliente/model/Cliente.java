@@ -1,11 +1,9 @@
 package com.api.cliente.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "tb_cliente")
 public class Cliente {
 
     @Id
@@ -15,19 +13,6 @@ public class Cliente {
     private String cpf;
     private String dataNascimento;
     private int quantidadeVeiculos;
-
-    // Construtor padrão (sem argumentos)
-    public Cliente() {
-    }
-
-    // Construtor com todos os campos
-    public Cliente(Long id, String nome, String cpf, String dataNascimento, int quantidadeVeiculos) {
-        this.id = id;
-        this.nome = nome;
-        this.cpf = cpf;
-        this.dataNascimento = dataNascimento;
-        this.quantidadeVeiculos = quantidadeVeiculos;
-    }
 
     // Getters e Setters
     public Long getId() {
