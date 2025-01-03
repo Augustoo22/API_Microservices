@@ -65,5 +65,6 @@ public class ClienteController {
         cliente.setCpf(clienteAtualizado.getCpf());
         cliente.setDataNascimento(clienteAtualizado.getDataNascimento());
         cliente.setQuantidadeVeiculos(clienteAtualizado.getQuantidadeVeiculos());
+        cliente.setVeiculos(clienteAtualizado.getVeiculos());
     }
 }

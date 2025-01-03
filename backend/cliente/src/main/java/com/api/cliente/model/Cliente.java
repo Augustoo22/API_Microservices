@@ -1,6 +1,7 @@
 package com.api.cliente.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_cliente")
@@ -13,6 +14,11 @@ public class Cliente {
     private String cpf;
     private String dataNascimento;
     private int quantidadeVeiculos;
+
+    @ElementCollection
+    @CollectionTable(name = "tb_veiculos", joinColumns = @JoinColumn(name = "cliente_id"))
+    @Column(name = "veiculo")
+    private List<String> veiculos;  // Lista de veículos
 
     // Getters e Setters
     public Long getId() {
@@ -53,5 +59,13 @@ public class Cliente {
 
     public void setQuantidadeVeiculos(int quantidadeVeiculos) {
         this.quantidadeVeiculos = quantidadeVeiculos;
+    }
+
+    public List<String> getVeiculos() {
+        return veiculos;
+    }
+
+    public void setVeiculos(List<String> veiculos) {
+        this.veiculos = veiculos;
     }
 }
