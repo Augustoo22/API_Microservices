@@ -1,24 +1,20 @@
-package com.api.cliente.model;
+package com.api.funcionario.model;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
-@Table(name = "tb_cliente")
-public class Cliente {
-
+@Table(name = "tb_funcionario")
+public class Funcionario {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private String cpf;
+    private String cargo;
     private String dataNascimento;
-    private int quantidadeVeiculos;
-
-    @ElementCollection
-    @CollectionTable(name = "tb_veiculos", joinColumns = @JoinColumn(name = "cliente_id"))
-    @Column(name = "veiculo")
-    private List<String> veiculos;  // Lista de veículos
+    private String especialidade;
+    private int anosExperiencia;
 
     // Getters e Setters
     public Long getId() {
@@ -45,6 +41,14 @@ public class Cliente {
         this.cpf = cpf;
     }
 
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
+
     public String getDataNascimento() {
         return dataNascimento;
     }
@@ -53,19 +57,19 @@ public class Cliente {
         this.dataNascimento = dataNascimento;
     }
 
-    public int getQuantidadeVeiculos() {
-        return quantidadeVeiculos;
+    public String getEspecialidade() {
+        return especialidade;
     }
 
-    public void setQuantidadeVeiculos(int quantidadeVeiculos) {
-        this.quantidadeVeiculos = quantidadeVeiculos;
+    public void setEspecialidade(String especialidade) {
+        this.especialidade = especialidade;
     }
 
-    public List<String> getVeiculos() {
-        return veiculos;
+    public int getAnosExperiencia() {
+        return anosExperiencia;
     }
 
-    public void setVeiculos(List<String> veiculos) {
-        this.veiculos = veiculos;
+    public void setAnosExperiencia(int anosExperiencia) {
+        this.anosExperiencia = anosExperiencia;
     }
 }
