@@ -1,10 +1,23 @@
+import Card from '../../components/card';
+
 export default function Ordemservico() {
     return (
-      <div className="flex">
-        <div className="ml-64 p-8">
-          <h1 className="text-3xl font-bold">Hello O.S</h1>
-        </div>
-      </div>
+      <div
+      style={{
+        backgroundColor: '#E9E9E9',
+        height: '100vh', 
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 0, 
+        margin: 0, 
+        gap: '80px',
+      }}
+    >
+      <Card icon="plus.png" text="Nova Ordem de Serviço" />
+      <Card icon="Notepad.png" text="Gerenciar Ordem de Serviço" />
+    </div>
     );
   }
   
