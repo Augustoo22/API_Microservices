@@ -12,11 +12,11 @@ export default function RootLayout({
   const pathname = usePathname();
 
   const menuItems = [
-    { href: "/inicio", src: "home.png", selectedSrc: "home2.png", alt: "Inicio", label: "Inicio" },
-    { href: "/funcionario", src: "PeopleTeam.png", selectedSrc: "PeopleTeam2.png", alt: "Funcionário", label: "Funcionário" },
-    { href: "/veiculos", src: "Car.png", selectedSrc: "Car2.png", alt: "Veiculos", label: "Veiculos" },
-    { href: "/clientes", src: "customerlistsfill.png", selectedSrc: "customerlistsfill2.png", alt: "Clientes", label: "Clientes" },
-    { href: "/ordemservico", src: "Notepad.png", selectedSrc: "Notepad2.png", alt: "Ordem de Serviço", label: "Ordem de Serviço" },
+    { href: "/inicio", src: "/home.png", selectedSrc: "/home2.png", alt: "Inicio", label: "Inicio" },
+    { href: "/funcionario", src: "/PeopleTeam.png", selectedSrc: "/PeopleTeam2.png", alt: "Funcionário", label: "Funcionário" },
+    { href: "/veiculos", src: "/Car.png", selectedSrc: "/Car2.png", alt: "Veiculos", label: "Veiculos" },
+    { href: "/clientes", src: "/customerlistsfill.png", selectedSrc: "/customerlistsfill2.png", alt: "Clientes", label: "Clientes" },
+    { href: "/ordemservico", src: "/Notepad.png", selectedSrc: "/Notepad2.png", alt: "Ordem de Serviço", label: "Ordem de Serviço" },
   ];
 
   return (
@@ -26,6 +26,7 @@ export default function RootLayout({
           margin: 0,
           padding: 0,
           fontFamily: "Arial, Helvetica, sans-serif",
+          backgroundColor: "#E9E9E9", // Fixed the missing quotes around the color value
         }}
       >
         <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
@@ -39,7 +40,7 @@ export default function RootLayout({
               display: "flex",
               flexDirection: "column",
               justifyContent: "flex-start",
-              overflowY: "auto", // Permite rolagem vertical
+              overflowY: "auto",
               height: "100%",
             }}
           >
@@ -69,10 +70,18 @@ export default function RootLayout({
                         justifyContent: "center",
                         backgroundColor: isSelected ? "white" : "transparent",
                         borderBottom: index !== array.length - 1 ? "1px solid #fff" : "none",
-                        borderTopRightRadius: isFirst ? "35px" : "35",
-                        borderBottomRightRadius: isLast ? "35px" : "35",
+                        borderTopRightRadius: isFirst ? "35px" : "0",
+                        borderBottomRightRadius: isLast ? "35px" : "0",
+                        cursor: "pointer", 
+                        transition: "all 0.3s ease",
                       }}
                       onClick={() => router.push(href)}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = isSelected ? "white" : "#3a3693"; // Efeito de hover
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = isSelected ? "white" : "transparent";
+                      }}
                     >
                       <a
                         style={{
@@ -90,7 +99,7 @@ export default function RootLayout({
                         />
                         <span
                           style={{
-                            marginTop: "10px",
+                            marginTop: "20px",
                             fontSize: "22px",
                             textAlign: "center",
                           }}
@@ -104,7 +113,7 @@ export default function RootLayout({
               </ul>
             </nav>
           </aside>
-          <main style={{ flex: 1, padding: "1rem", overflow: "auto" }}>{children}</main>
+          <main style={{ flex: 5, padding: "0px", overflow: "auto" }}>{children}</main>
         </div>
       </body>
     </html>
