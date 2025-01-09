@@ -6,14 +6,14 @@ const Card = ({ icon, text }: { icon: string; text: string }) => {
     <div
       style={{
         display: "flex",
-        flexDirection: "row", // Muda a direção para linha (lado a lado)
-        alignItems: "center", // Alinha a imagem e o texto verticalmente
+        flexDirection: "row",
+        alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#08005B",
         color: "white",
         borderRadius: "35px",
-        padding: "20px", // Diminuí o padding para evitar sobrecarga no tamanho
-        boxSizing: "border-box", // Garante que o padding não altere o tamanho do elemento
+        padding: "20px",
+        boxSizing: "border-box",
         boxShadow: "0px 8px 0px #1500FF",
         cursor: "pointer",
         transition: "transform 0.2s",

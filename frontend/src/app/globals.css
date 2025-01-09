@@ -20,3 +20,8 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.link-none {
+  text-decoration: none; 
+  color: inherit;
+}
