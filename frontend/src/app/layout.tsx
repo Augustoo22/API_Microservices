@@ -26,7 +26,7 @@ export default function RootLayout({
           margin: 0,
           padding: 0,
           fontFamily: "Arial, Helvetica, sans-serif",
-          backgroundColor: "#E9E9E9", // Fixed the missing quotes around the color value
+          backgroundColor: "#E9E9E9",
         }}
       >
         <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
@@ -55,7 +55,7 @@ export default function RootLayout({
                 }}
               >
                 {menuItems.map(({ href, src, selectedSrc, alt, label }, index, array) => {
-                  const isSelected = href === pathname;
+                  const isSelected = pathname.startsWith(href);
                   const isFirst = index === 0;
                   const isLast = index === array.length - 1;
 
@@ -72,12 +72,12 @@ export default function RootLayout({
                         borderBottom: index !== array.length - 1 ? "1px solid #fff" : "none",
                         borderTopRightRadius: isFirst ? "35px" : "0",
                         borderBottomRightRadius: isLast ? "35px" : "0",
-                        cursor: "pointer", 
+                        cursor: "pointer",
                         transition: "all 0.3s ease",
                       }}
                       onClick={() => router.push(href)}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = isSelected ? "white" : "#3a3693"; // Efeito de hover
+                        e.currentTarget.style.backgroundColor = isSelected ? "white" : "#3a3693";
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = isSelected ? "white" : "transparent";

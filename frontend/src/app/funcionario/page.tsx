@@ -1,24 +1,37 @@
+import Link from 'next/link';
 import Card from '../../components/card';
 
-
 export default function Funcionario() {
-    return (
-      <div
+  return (
+    <div
       style={{
         backgroundColor: '#E9E9E9',
-        height: '100vh', 
-        display: 'flex', 
-        flexDirection: 'row', 
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 0, 
-        margin: 0, 
+        padding: 0,
+        margin: 0,
         gap: '80px',
       }}
     >
+    <Link
+      href="/funcionario/cadastro"
+      style={{
+        textDecoration: 'none',
+        color: 'inherit',
+      }}
+    >
       <Card icon="plus.png" text="Novo Funcionario" />
-      <Card icon="Notepad.png" text="Gerenciar Funcionarios" />
+    </Link>
+
+      <Link href="/funcionario/tabela"       style={{
+        textDecoration: 'none',
+        color: 'inherit',
+      }}>
+        <Card icon="Notepad.png" text="Gerenciar Funcionarios" />
+      </Link>
     </div>
-    );
-  }
-  
+  );
+}
