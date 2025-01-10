@@ -115,6 +115,10 @@ export default function CadastroFuncionario() {
           <TextField
             label="Data Nascimento"
             variant="outlined"
+            type="date"
+            InputLabelProps={{
+                shrink: true,
+            }}
             fullWidth
             sx={{
               "& .MuiOutlinedInput-root": {
