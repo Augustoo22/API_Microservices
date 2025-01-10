@@ -24,7 +24,7 @@ export default function CadastroFuncionario() {
         sx={{
           display: "flex",
           height: "100vh", 
-          backgroundColor: "#f5f5f5",
+          backgroundColor: "#E9E9E9",
         }}
       >
         <Box
