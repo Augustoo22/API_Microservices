@@ -1,4 +1,6 @@
 import Card from '../../components/card';
+import Link from 'next/link';
+
 
 export default function Cliente() {
   return (
@@ -15,8 +17,21 @@ export default function Cliente() {
         gap: '80px',
       }}
     >
+      <Link
+      href="/clientes/cadastro"
+      style={{
+        textDecoration: 'none',
+        color: 'inherit',
+      }}
+    >
       <Card icon="plus.png" text="Novo Cliente" />
+    </Link> 
+    <Link href="/veiculos/tabela"       style={{
+        textDecoration: 'none',
+        color: 'inherit',
+      }}>
       <Card icon="Notepad.png" text="Gerenciar Clientes" />
+    </Link>
     </div>
   );
 }
