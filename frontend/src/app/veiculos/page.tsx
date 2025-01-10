@@ -1,4 +1,6 @@
 import Card from '../../components/card';
+import Link from 'next/link';
+
 
 export default function Veiculos() {
     return (
@@ -15,8 +17,21 @@ export default function Veiculos() {
         gap: '80px',
       }}
     >
+    <Link
+      href="/veiculos/cadastro"
+      style={{
+        textDecoration: 'none',
+        color: 'inherit',
+      }}
+    >
       <Card icon="plus.png" text="Novo Veiculo" />
+    </Link>
+    <Link href="/veiculos/tabela"       style={{
+        textDecoration: 'none',
+        color: 'inherit',
+      }}>
       <Card icon="Notepad.png" text="Gerenciar Veiculos" />
+      </Link>
     </div>
     );
   }

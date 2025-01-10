@@ -1,10 +1,11 @@
-'use client'
-import React from "react";
+'use client';
+import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Link from "next/link";
+import MenuItem from "@mui/material/MenuItem";
 
 const theme = createTheme({
   palette: {
@@ -17,13 +18,23 @@ const theme = createTheme({
   },
 });
 
-export default function CadastroFuncionario() {
+export default function CadastroVeiculos() {
+  // Estados controlados
+  const [veiculo, setVeiculo] = useState("");
+  const [marca, setMarca] = useState("");
+  const [placa, setPlaca] = useState("");
+  const [tipo, setTipo] = useState("");
+  const [status, setStatus] = useState("");
+  const [anoFabricacao, setAnoFabricacao] = useState("");
+  const [dataEntrada, setDataEntrada] = useState("");
+  const [previsao, setPrevisao] = useState("");
+
   return (
     <ThemeProvider theme={theme}>
       <Box
         sx={{
           display: "flex",
-          height: "100vh", 
+          height: "100vh",
           backgroundColor: "#f5f5f5",
         }}
       >
@@ -36,38 +47,14 @@ export default function CadastroFuncionario() {
             marginLeft: "25px",
           }}
         >
-          <h1 style={{ textAlign: "left", color: "#08005B" }}>
-            Cadastro de Funcionário
-          </h1>
+          <h1 style={{ textAlign: "left", color: "#08005B" }}>Cadastro Veículos</h1>
 
           <TextField
-            label="Nome Completo"
+            label="Veículo"
             variant="outlined"
             fullWidth
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "#08005B", 
-                },
-                "&:hover fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#08005B", 
-                },
-              },
-              "& .MuiInputLabel-root": {
-                color: "#08005B", 
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#08005B",
-              },
-            }}
-          />
-          <TextField
-            label="CPF"
-            variant="outlined"
-            fullWidth
+            value={veiculo}
+            onChange={(e) => setVeiculo(e.target.value)}
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
@@ -89,9 +76,11 @@ export default function CadastroFuncionario() {
             }}
           />
           <TextField
-            label="Cargo"
+            label="Marca"
             variant="outlined"
             fullWidth
+            value={marca}
+            onChange={(e) => setMarca(e.target.value)}
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
@@ -113,20 +102,105 @@ export default function CadastroFuncionario() {
             }}
           />
           <TextField
-            label="Data Nascimento"
+            label="Placa"
             variant="outlined"
-            type="date"
-            InputLabelProps={{
-                shrink: true,
-            }}
             fullWidth
+            value={placa}
+            onChange={(e) => setPlaca(e.target.value)}
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
                   borderColor: "#08005B",
                 },
                 "&:hover fieldset": {
-                  borderColor: "#4A00E0",
+                  borderColor: "#08005B",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#08005B",
+                },
+              },
+              "& .MuiInputLabel-root": {
+                color: "#08005B",
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: "#08005B",
+              },
+            }}
+          />
+          <TextField
+            label="Tipo"
+            variant="outlined"
+            select
+            fullWidth
+            value={tipo}
+            onChange={(e) => setTipo(e.target.value)}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "#08005B",
+                },
+                "&:hover fieldset": {
+                  borderColor: "#08005B",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#08005B",
+                },
+              },
+              "& .MuiInputLabel-root": {
+                color: "#08005B",
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: "#08005B",
+              },
+            }}
+          >
+            <MenuItem value="Carro">Carro</MenuItem>
+            <MenuItem value="Moto">Moto</MenuItem>
+            <MenuItem value="Caminhão">Caminhão</MenuItem>
+          </TextField>
+          <TextField
+            label="Status"
+            variant="outlined"
+            select
+            fullWidth
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "#08005B",
+                },
+                "&:hover fieldset": {
+                  borderColor: "#08005B",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#08005B",
+                },
+              },
+              "& .MuiInputLabel-root": {
+                color: "#08005B",
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: "#08005B",
+              },
+            }}
+          >
+            <MenuItem value="Ativo">Ativo</MenuItem>
+            <MenuItem value="Inativo">Inativo</MenuItem>
+          </TextField>
+          <TextField
+            label="Ano Fabricação"
+            variant="outlined"
+            fullWidth
+            value={anoFabricacao}
+            onChange={(e) => setAnoFabricacao(e.target.value)}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "#08005B",
+                },
+                "&:hover fieldset": {
+                  borderColor: "#08005B",
                 },
                 "&.Mui-focused fieldset": {
                   borderColor: "#08005B",
@@ -141,7 +215,6 @@ export default function CadastroFuncionario() {
             }}
           />
 
-          {/* Campos lado a lado */}
           <Box
             sx={{
               display: "flex",
@@ -150,40 +223,49 @@ export default function CadastroFuncionario() {
             }}
           >
             <TextField
-              label="Especialidade"
-              variant="outlined"
-              sx={{
-                flex: 1,
+            label="Data Entrada"
+            type="date"
+            variant="outlined"
+            fullWidth
+            value={dataEntrada}
+            onChange={(e) => setDataEntrada(e.target.value)}
+            InputLabelProps={{
+                shrink: true, // Isso garante que o label não sobreponha o valor
+            }}
+            sx={{
                 "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
+                "& fieldset": {
                     borderColor: "#08005B",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#4A00E0",
-                  },
-                  "&.Mui-focused fieldset": {
+                },
+                "&:hover fieldset": {
                     borderColor: "#08005B",
-                  },
+                },
+                "&.Mui-focused fieldset": {
+                    borderColor: "#08005B",
+                },
                 },
                 "& .MuiInputLabel-root": {
-                  color: "#08005B",
+                color: "#08005B",
                 },
                 "& .MuiInputLabel-root.Mui-focused": {
-                  color: "#08005B",
+                color: "#08005B",
                 },
-              }}
+            }}
             />
+
             <TextField
-              label="Anos Experiência"
+              label="Previsão"
               variant="outlined"
+              fullWidth
+              value={previsao}
+              onChange={(e) => setPrevisao(e.target.value)}
               sx={{
-                flex: 1,
                 "& .MuiOutlinedInput-root": {
                   "& fieldset": {
                     borderColor: "#08005B",
                   },
                   "&:hover fieldset": {
-                    borderColor: "#4A00E0",
+                    borderColor: "#08005B",
                   },
                   "&.Mui-focused fieldset": {
                     borderColor: "#08005B",
@@ -199,7 +281,6 @@ export default function CadastroFuncionario() {
             />
           </Box>
 
-          {/* Botões principais */}
           <Box
             sx={{
               display: "flex",
@@ -245,7 +326,7 @@ export default function CadastroFuncionario() {
           </Box>
         </Box>
 
-        <Link href="/funcionario" passHref>
+        <Link href="/veiculos" passHref>
           <Button
             variant="contained"
             sx={{
