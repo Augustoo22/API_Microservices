@@ -26,7 +26,7 @@ export default function Cliente() {
     >
       <Card icon="plus.png" text="Novo Cliente" />
     </Link> 
-    <Link href="/veiculos/tabela"       style={{
+    <Link href="/clientes/tabela"       style={{
         textDecoration: 'none',
         color: 'inherit',
       }}>

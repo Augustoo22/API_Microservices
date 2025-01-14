@@ -16,8 +16,24 @@ export default function Ordemservico() {
         gap: '80px',
       }}
     >
-      <Card icon="plus.png" text="Nova Ordem de Serviço" />
+    <Link
+      href="/ordemservico/cadastro"
+      style={{
+      textDecoration: 'none',
+      color: 'inherit',
+      }}
+      >
+        <Card icon="plus.png" text="Nova Ordem de Serviço" />
+    </Link>    
+    <Link
+      href="/ordemservico/tabela"
+      style={{
+      textDecoration: 'none',
+      color: 'inherit',
+      }}
+      >
       <Card icon="Notepad.png" text="Gerenciar Ordem de Serviço" />
+    </Link>
     </div>
     );
   }

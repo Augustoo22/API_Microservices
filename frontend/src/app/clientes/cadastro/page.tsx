@@ -233,7 +233,7 @@ export default function CadastroClientes() {
             </Button>
           </Box>
         </Box>
-        <Link href="/cliente" passHref>
+        <Link href="/clientes" passHref>
           <Button
             variant="contained"
             sx={{
