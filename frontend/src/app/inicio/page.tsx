@@ -125,8 +125,8 @@ const DashboardLayout: React.FC = () => {
               alt={card.label}
               style={{
                 marginRight: "100px",
-                width: "90px", // Aumentado o tamanho do ícone
-                height: "90px", // Aumentado o tamanho do ícone
+                width: "90px",
+                height: "90px",
               }}
             />
             <div style={{ textAlign: "left" }}>

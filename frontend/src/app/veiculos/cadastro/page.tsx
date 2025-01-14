@@ -345,6 +345,25 @@ export default function CadastroVeiculos() {
             Menu
           </Button>
         </Link>
+        <Link href="/veiculos/tabela" passHref>
+          <Button
+            variant="contained"
+            sx={{
+              position: "absolute",
+              bottom: "16px",
+              right: "150px",
+              backgroundColor: "#08005B",
+              color: "#FFF",
+              padding: "12px 24px",
+              fontSize: "16px",
+              "&:hover": {
+                backgroundColor: "#08005B",
+              },
+            }}
+          >
+            Tabela
+          </Button>
+          </Link>
       </Box>
     </ThemeProvider>
   );

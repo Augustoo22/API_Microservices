@@ -3,7 +3,7 @@ version: '3.8'
 services:
   cliente-app:
     build:
-      context: ./cliente
+      context: ./backend/cliente
       dockerfile: Dockerfile
     ports:
       - "8080:8080" 
@@ -12,7 +12,7 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123456
     depends_on:
-      - cliente-db 
+      - cliente-db
 
   cliente-db:
     image: postgres:15
@@ -28,7 +28,7 @@ services:
 
   veiculo-app:
     build:
-      context: ./veiculo
+      context: ./backend/veiculo
       dockerfile: Dockerfile
     ports:
       - "7070:7070"
@@ -53,7 +53,7 @@ services:
 
   funcionario-app:
     build:
-      context: ./funcionario
+      context: ./backend/funcionario
       dockerfile: Dockerfile
     ports:
       - "5050:5050"
@@ -78,7 +78,7 @@ services:
 
   ordem-servico-app:
     build:
-      context: ./ordemServico
+      context: ./backend/ordemServico
       dockerfile: Dockerfile
     ports:
       - "6060:6060"
@@ -100,6 +100,18 @@ services:
       - "5436:5432"
     volumes:
       - ordem_servicos_db_data:/var/lib/postgresql/data
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - cliente-app
+      - veiculo-app
+      - funcionario-app
+      - ordem-servico-app
 
 volumes:
   clientes_db_data: 
