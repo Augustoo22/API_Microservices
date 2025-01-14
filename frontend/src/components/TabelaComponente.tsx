@@ -104,66 +104,66 @@ const TabelaComponente: React.FC<Props> = ({ headers, data, rowsPerPage = 5 }) =
     </tr>
   </thead>
   <tbody>
-    {paginatedData.map((row, rowIndex) => (
-      <tr
-        key={row.id as number}
-        style={{
-          backgroundColor: rowIndex % 2 === 0 ? "#FFFFFF" : "#08005B",
-          color: rowIndex % 2 === 0 ? "#08005B" : "#FFFFFF",
-        }}
-      >
-        {headers.map((header, index) => (
-          <td
-            key={index}
-            style={{
-              border: "1px solid #E9E9E9",
-              padding: "8px",
-              textAlign: "center", // Centraliza os dados
-            }}
-          >
-            {row[header.key]}
-          </td>
-        ))}
+  {paginatedData.map((row, rowIndex) => (
+    <tr
+      key={row.id ? row.id : `row-${rowIndex}`}
+      style={{
+        backgroundColor: rowIndex % 2 === 0 ? "#FFFFFF" : "#08005B",
+        color: rowIndex % 2 === 0 ? "#08005B" : "#FFFFFF",
+      }}
+    >
+      {headers.map((header, index) => (
         <td
+          key={`cell-${rowIndex}-${index}`}
           style={{
             border: "1px solid #E9E9E9",
             padding: "8px",
-            textAlign: "center", // Centraliza a coluna de ações
+            textAlign: "center", // Centraliza os dados
           }}
         >
-          <button
-            style={{
-              marginRight: "8px",
-              backgroundColor: rowIndex % 2 === 0 ? "#08005B" : "#FFFFFF",
-              color: rowIndex % 2 === 0 ? "#FFFFFF" : "#08005B",
-              border: "none",
-              padding: "5px 10px",
-              borderRadius: "15px",
-              cursor: "pointer",
-              height: "45px",
-            }}
-            onClick={() => console.log("Editar", row.id)}
-          >
-            Editar
-          </button>
-          <button
-            style={{
-              backgroundColor: rowIndex % 2 === 0 ? "#08005B" : "#FFFFFF",
-              color: rowIndex % 2 === 0 ? "#FFFFFF" : "#08005B",
-              border: "none",
-              padding: "5px 10px",
-              borderRadius: "15px",
-              cursor: "pointer",
-              height: "45px",
-            }}
-            onClick={() => console.log("Apagar", row.id)}
-          >
-            Apagar
-          </button>
+          {row[header.key]}
         </td>
-      </tr>
-    ))}
-  </tbody>
+      ))}
+      <td
+        style={{
+          border: "1px solid #E9E9E9",
+          padding: "8px",
+          textAlign: "center", // Centraliza a coluna de ações
+        }}
+      >
+        <button
+          style={{
+            marginRight: "8px",
+            backgroundColor: rowIndex % 2 === 0 ? "#08005B" : "#FFFFFF",
+            color: rowIndex % 2 === 0 ? "#FFFFFF" : "#08005B",
+            border: "none",
+            padding: "5px 10px",
+            borderRadius: "15px",
+            cursor: "pointer",
+            height: "45px",
+          }}
+          onClick={() => console.log("Editar", row.id)}
+        >
+          Editar
+        </button>
+        <button
+          style={{
+            backgroundColor: rowIndex % 2 === 0 ? "#08005B" : "#FFFFFF",
+            color: rowIndex % 2 === 0 ? "#FFFFFF" : "#08005B",
+            border: "none",
+            padding: "5px 10px",
+            borderRadius: "15px",
+            cursor: "pointer",
+            height: "45px",
+          }}
+          onClick={() => console.log("Apagar", row.id)}
+        >
+          Apagar
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
 </table>
 
 
