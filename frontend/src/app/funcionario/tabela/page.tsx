@@ -1,52 +1,58 @@
 import React from "react";
 import TabelaComponente from "../../../components/TabelaComponente";
 import Link from "next/link";
-import Button from "@mui/material/Button";
+import Button from "@mui/material/Button"; // Importação do Button
 
 const App: React.FC = () => {
   const headers = [
     { label: "ID", key: "id" },
-    { label: "Serviço", key: "servico" },
-    { label: "Data Início", key: "dataInicio" },
-    { label: "Data Término", key: "dataTermino" },
-    { label: "Status O.S.", key: "statusOs" },
+    { label: "Nome", key: "nome" },
+    { label: "CPF", key: "cpf" },
+    { label: "Cargo", key: "cargo" },
+    { label: "Especialidade", key: "especialidade" },
+    { label: "Anos de Experiência", key: "anosExperiencia" },
   ];
 
   const data = [
     {
       id: 1,
-      servico: "Troca de óleo",
-      dataInicio: "10/01/2025",
-      dataTermino: "12/01/2025",
-      statusOs: "Finalizado",
+      nome: "José Silva",
+      cpf: "111.111.111-11",
+      cargo: "Mecânico",
+      especialidade: "Motor",
+      anosExperiencia: 10,
     },
     {
       id: 2,
-      servico: "Reparo de suspensão",
-      dataInicio: "11/01/2025",
-      dataTermino: "14/01/2025",
-      statusOs: "Em andamento",
+      nome: "Ana Souza",
+      cpf: "222.222.222-22",
+      cargo: "Eletricista",
+      especialidade: "Sistemas Elétricos",
+      anosExperiencia: 8,
     },
     {
       id: 3,
-      servico: "Troca de pneus",
-      dataInicio: "15/01/2025",
-      dataTermino: "15/01/2025",
-      statusOs: "Finalizado",
+      nome: "Pedro Santos",
+      cpf: "333.333.333-33",
+      cargo: "Mecânico",
+      especialidade: "Suspensão",
+      anosExperiencia: 12,
     },
     {
       id: 4,
-      servico: "Alinhamento e balanceamento",
-      dataInicio: "16/01/2025",
-      dataTermino: "16/01/2025",
-      statusOs: "Pendente",
+      nome: "Maria Oliveira",
+      cpf: "444.444.444-44",
+      cargo: "Atendente",
+      especialidade: "Atendimento ao Cliente",
+      anosExperiencia: 6,
     },
     {
       id: 5,
-      servico: "Troca de pastilhas de freio",
-      dataInicio: "17/01/2025",
-      dataTermino: "18/01/2025",
-      statusOs: "Em andamento",
+      nome: "Carlos Lima",
+      cpf: "555.555.555-55",
+      cargo: "Gerente",
+      especialidade: "Gestão de Equipe",
+      anosExperiencia: 15,
     },
   ];
 
@@ -66,9 +72,9 @@ const App: React.FC = () => {
           flexDirection: "column",
         }}
       >
-        <h1 style={{ color: "#08005B" }}>Gerenciamento de Ordens de Serviço</h1>
+        <h1 style={{ color: "#08005B" }}>Gerenciamento de Funcionários</h1>
         <TabelaComponente headers={headers} data={data} rowsPerPage={5} />
-        <Link href="/ordemservico" passHref>
+        <Link href="/funcionario" passHref>
           <Button
             variant="contained"
             sx={{
