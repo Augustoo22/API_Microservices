@@ -1,13 +1,13 @@
 "use client"; // Adicione esta linha no início do arquivo
 
 import React, { useEffect, useState } from "react";
-import TabelaComponente from "../../../components/TabelaComponente";
 import Link from "next/link";
 import Button from "@mui/material/Button";
 import api from "../../../config/axiosConfigCliente";
+import ClienteTabela from "../../../components/ClienteTabela"; // Importando o componente de tabela
 
 const App: React.FC = () => {
-  const [clientes, setClientes] = useState([]);
+  const [clientes, setClientes] = useState<any[]>([]); // Use any[] ou um tipo adequado
   const [loading, setLoading] = useState(true);
 
   const headers = [
@@ -21,7 +21,7 @@ const App: React.FC = () => {
   const fetchClientes = async () => {
     try {
       const response = await api.get("/api/clientes");
-      console.log("Clientes recebidos:", response.data); // Verifique os dados aqui
+      console.log("Clientes recebidos:", response.data);
       setClientes(response.data);
       setLoading(false);
     } catch (error) {
@@ -30,19 +30,37 @@ const App: React.FC = () => {
     }
   };
 
+  const handleDelete = async (id: number) => {
+    try {
+      // Chama a API para excluir o cliente
+      await api.delete(`/api/clientes/${id}`);
+      // Atualiza o estado para remover o cliente da lista
+      setClientes(clientes.filter((cliente) => cliente.id !== id));
+    } catch (error) {
+      console.error("Erro ao deletar cliente:", error);
+    }
+  };
+
   useEffect(() => {
-    fetchClientes(); 
+    fetchClientes();
   }, []);
 
   if (loading) {
-    return <div>Carregando...</div>
+    return <div>Carregando...</div>;
   }
 
   return (
     <div style={{ display: "flex", height: "100vh", backgroundColor: "#E9E9E9" }}>
       <main style={{ flex: 1, padding: "20px", display: "flex", flexDirection: "column" }}>
         <h1 style={{ color: "#08005B" }}>Gerenciamento de Clientes</h1>
-        <TabelaComponente headers={headers} data={clientes} rowsPerPage={5} />
+
+        {/* Usando o componente ClienteTabela */}
+        <ClienteTabela
+          headers={headers}
+          data={clientes}
+          onDelete={handleDelete} // Passando a função onDelete
+        />
+
         <Link href="/clientes" passHref>
           <Button
             variant="contained"

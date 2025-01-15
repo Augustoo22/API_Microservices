@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -36,18 +36,25 @@ export default function CadastroClientes() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleClear = () => {
+    setFormData({ nome: "", cpf: "", dataNascimento: "" });
+    setVeiculosSelecionados({});
+    setQuantidadeVeiculos(1);
+  };
+
   const handleSubmit = async () => {
     const payload = {
       ...formData,
       veiculos: Object.values(veiculosSelecionados),
-      quantidadeVeiculos: quantidadeVeiculos, // Garantindo que quantidadeVeiculos está no payload
+      quantidadeVeiculos: quantidadeVeiculos,
     };
 
-    console.log("Payload sendo enviado:", payload); // Verifique o valor do payload aqui
+    console.log("Payload sendo enviado:", payload);
 
     try {
       const response = await api.post("/api/clientes", payload);
       console.log(response.data);
+      handleClear(); // Limpa os campos após o envio bem-sucedido
     } catch (error) {
       console.error("Erro ao cadastrar cliente:", error);
     }
@@ -113,7 +120,6 @@ export default function CadastroClientes() {
             value={quantidadeVeiculos}
             onChange={(e) => {
               const value = parseInt(e.target.value, 10);
-              console.log("Quantidade de veículos selecionados:", value); // Verifique o valor da quantidade
               setQuantidadeVeiculos(value);
             }}
             sx={muiStyles}
@@ -153,11 +159,7 @@ export default function CadastroClientes() {
             <Button
               variant="outlined"
               sx={buttonStyles.outlined}
-              onClick={() => {
-                setFormData({ nome: "", cpf: "", dataNascimento: "" });
-                setVeiculosSelecionados({});
-                setQuantidadeVeiculos(1);
-              }}
+              onClick={handleClear}
             >
               Limpar
             </Button>

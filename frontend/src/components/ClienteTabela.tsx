@@ -1,6 +1,5 @@
-"use client"; 
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/compat/router";
 
 type Header = {
   label: string;
@@ -11,17 +10,22 @@ type Props = {
   headers: Header[];
   data: Array<Record<string, string | number | undefined>>;
   rowsPerPage?: number;
-  onDelete: (id: number) => void;  // Função para apagar cliente
+  onDelete: (id: number) => void; // Função para apagar cliente
 };
 
-type Filters = {
-  filter1: string;
-  filter2: string;
-};
-
-const TabelaComponente: React.FC<Props> = ({ headers, data, rowsPerPage = 5, onDelete }) => {
+const ClienteTabela: React.FC<Props> = ({ headers, data, rowsPerPage = 5, onDelete }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [filters, setFilters] = useState<Filters>({ filter1: "", filter2: "" });
+  const [isClient, setIsClient] = useState(false); // Estado para verificar se está no cliente
+  const router = useRouter(); // Inicializando o router
+
+  useEffect(() => {
+    // Garantindo que o código só será executado no cliente
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null; // Impede renderização no servidor
+  }
 
   const totalPages = Math.ceil(data.length / rowsPerPage);
 
@@ -31,42 +35,19 @@ const TabelaComponente: React.FC<Props> = ({ headers, data, rowsPerPage = 5, onD
     }
   };
 
-  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
-  };
-
-  const filteredData = data.filter(
-    (row) =>
-      row[headers[1].key]?.toString().toLowerCase().includes(filters.filter1.toLowerCase()) &&
-      row[headers[2].key]?.toString().toLowerCase().includes(filters.filter2.toLowerCase())
-  );
-
   const startIndex = (currentPage - 1) * rowsPerPage;
-  const paginatedData = filteredData.slice(startIndex, startIndex + rowsPerPage);
+  const paginatedData = data.slice(startIndex, startIndex + rowsPerPage);
+
+  const handleEdit = (id: number) => {
+    if (router && id) {
+      console.log("Redirecionando para a edição do cliente com ID:", id); // Verifique se o ID está sendo capturado corretamente
+      router.push(`/clientes/editar/${id}`); // Direciona para a página de edição
+    }
+  };
+  
 
   return (
     <div>
-      {/* Filtros */}
-      <div style={{ marginBottom: "10px" }}>
-        <input
-          type="text"
-          name="filter1"
-          placeholder={headers[1].label}
-          value={filters.filter1}
-          onChange={handleFilterChange}
-          style={{ padding: "5px", marginRight: "10px", border: "3px solid #08005B", borderRadius:"10px", height: "20px" }}
-        />
-        <input
-          type="text"
-          name="filter2"
-          placeholder={headers[2].label}
-          value={filters.filter2}
-          onChange={handleFilterChange}
-          style={{ padding: "5px", border: "3px solid #08005B", borderRadius:"10px", height: "20px" }}
-        />
-      </div>
-
       <table
         style={{
           width: "950px",
@@ -144,7 +125,7 @@ const TabelaComponente: React.FC<Props> = ({ headers, data, rowsPerPage = 5, onD
                     cursor: "pointer",
                     height: "45px",
                   }}
-                  onClick={() => console.log("Editar", row.id)}
+                  onClick={() => handleEdit(row.id)} // Chama a função handleEdit
                 >
                   Editar
                 </button>
@@ -209,4 +190,4 @@ const TabelaComponente: React.FC<Props> = ({ headers, data, rowsPerPage = 5, onD
   );
 };
 
-export default TabelaComponente;
+export default ClienteTabela;
