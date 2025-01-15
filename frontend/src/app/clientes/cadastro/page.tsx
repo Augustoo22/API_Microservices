@@ -5,25 +5,25 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Link from 'next/link';
-
+import Link from "next/link";
+import api from "../../../config/axiosConfigCliente";
 
 const theme = createTheme({
   palette: {
-    primary: {
-      main: "#08005B",
-    },
-    secondary: {
-      main: "#08005B",
-    },
+    primary: { main: "#08005B" },
+    secondary: { main: "#08005B" },
   },
 });
 
 export default function CadastroClientes() {
-  const [quantidadeVeiculos, setQuantidadeVeiculos] = useState(1); // Estado para quantidade de veículos
-  const [veiculosSelecionados, setVeiculosSelecionados] = useState({}); // Estado para os veículos adicionais
+  const [quantidadeVeiculos, setQuantidadeVeiculos] = useState(1);
+  const [veiculosSelecionados, setVeiculosSelecionados] = useState({});
+  const [formData, setFormData] = useState({
+    nome: "",
+    cpf: "",
+    dataNascimento: "",
+  });
 
-  // Função para atualizar os veículos selecionados dinamicamente
   const handleVeiculoChange = (index, value) => {
     setVeiculosSelecionados((prevState) => ({
       ...prevState,
@@ -31,12 +31,34 @@ export default function CadastroClientes() {
     }));
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async () => {
+    const payload = {
+      ...formData,
+      veiculos: Object.values(veiculosSelecionados),
+      quantidadeVeiculos: quantidadeVeiculos, // Garantindo que quantidadeVeiculos está no payload
+    };
+
+    console.log("Payload sendo enviado:", payload); // Verifique o valor do payload aqui
+
+    try {
+      const response = await api.post("/api/clientes", payload);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Erro ao cadastrar cliente:", error);
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Box
         sx={{
           display: "flex",
-          height: "100vh", 
+          height: "100vh",
           backgroundColor: "#E9E9E9",
         }}
       >
@@ -49,85 +71,38 @@ export default function CadastroClientes() {
             marginLeft: "25px",
           }}
         >
-          <h1 style={{textAlign: "left", color: "#08005B" }}>Cadastro Clientes</h1>
+          <h1 style={{ textAlign: "left", color: "#08005B" }}>Cadastro Clientes</h1>
 
           <TextField
             label="Nome Cliente"
+            name="nome"
             variant="outlined"
             fullWidth
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#08005B",
-                },
-              },
-              "& .MuiInputLabel-root": {
-                color: "#08005B",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#08005B",
-              },
-            }}
+            value={formData.nome}
+            onChange={handleInputChange}
+            sx={muiStyles}
           />
 
           <TextField
             label="CPF"
+            name="cpf"
             variant="outlined"
             fullWidth
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#08005B",
-                },
-              },
-              "& .MuiInputLabel-root": {
-                color: "#08005B",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#08005B",
-              },
-            }}
+            value={formData.cpf}
+            onChange={handleInputChange}
+            sx={muiStyles}
           />
 
           <TextField
             label="Data Nascimento"
+            name="dataNascimento"
             type="date"
             variant="outlined"
             fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#08005B",
-                },
-              },
-              "& .MuiInputLabel-root": {
-                color: "#08005B",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#08005B",
-              },
-            }}
+            InputLabelProps={{ shrink: true }}
+            value={formData.dataNascimento}
+            onChange={handleInputChange}
+            sx={muiStyles}
           />
 
           <TextField
@@ -136,26 +111,12 @@ export default function CadastroClientes() {
             variant="outlined"
             fullWidth
             value={quantidadeVeiculos}
-            onChange={(e) => setQuantidadeVeiculos(parseInt(e.target.value))}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#08005B",
-                },
-              },
-              "& .MuiInputLabel-root": {
-                color: "#08005B",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#08005B",
-              },
+            onChange={(e) => {
+              const value = parseInt(e.target.value, 10);
+              console.log("Quantidade de veículos selecionados:", value); // Verifique o valor da quantidade
+              setQuantidadeVeiculos(value);
             }}
+            sx={muiStyles}
           >
             {[1, 2, 3, 4, 5].map((value) => (
               <MenuItem key={value} value={value}>
@@ -173,27 +134,8 @@ export default function CadastroClientes() {
               fullWidth
               value={veiculosSelecionados[index] || ""}
               onChange={(e) => handleVeiculoChange(index, e.target.value)}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "#08005B",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#08005B",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#08005B",
-                  },
-                },
-                "& .MuiInputLabel-root": {
-                  color: "#08005B",
-                },
-                "& .MuiInputLabel-root.Mui-focused": {
-                  color: "#08005B",
-                },
-              }}
+              sx={muiStyles}
             >
-              {/* Adicione as opções reais aqui */}
               <MenuItem value="Carro A">Carro A</MenuItem>
               <MenuItem value="Carro B">Carro B</MenuItem>
               <MenuItem value="Moto C">Moto C</MenuItem>
@@ -210,25 +152,17 @@ export default function CadastroClientes() {
           >
             <Button
               variant="outlined"
-              sx={{
-                borderColor: "#08005B",
-                color: "#08005B",
-                padding: "12px 24px",
-                fontSize: "16px",
+              sx={buttonStyles.outlined}
+              onClick={() => {
+                setFormData({ nome: "", cpf: "", dataNascimento: "" });
+                setVeiculosSelecionados({});
+                setQuantidadeVeiculos(1);
               }}
             >
               Limpar
             </Button>
 
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#08005B",
-                color: "#FFF",
-                padding: "12px 24px",
-                fontSize: "16px",
-              }}
-            >
+            <Button variant="contained" sx={buttonStyles.contained} onClick={handleSubmit}>
               Enviar
             </Button>
           </Box>
@@ -251,8 +185,8 @@ export default function CadastroClientes() {
           >
             Menu
           </Button>
-          </Link>
-          <Link href="/clientes/tabela" passHref>
+        </Link>
+        <Link href="/clientes/tabela" passHref>
           <Button
             variant="contained"
             sx={{
@@ -270,8 +204,43 @@ export default function CadastroClientes() {
           >
             Tabela
           </Button>
-          </Link>
+        </Link>
       </Box>
     </ThemeProvider>
   );
 }
+
+const muiStyles = {
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#08005B",
+    },
+    "&:hover fieldset": {
+      borderColor: "#08005B",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#08005B",
+    },
+  },
+  "& .MuiInputLabel-root": {
+    color: "#08005B",
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: "#08005B",
+  },
+};
+
+const buttonStyles = {
+  outlined: {
+    borderColor: "#08005B",
+    color: "#08005B",
+    padding: "12px 24px",
+    fontSize: "16px",
+  },
+  contained: {
+    backgroundColor: "#08005B",
+    color: "#FFF",
+    padding: "12px 24px",
+    fontSize: "16px",
+  },
+};
