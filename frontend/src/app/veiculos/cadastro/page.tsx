@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Link from "next/link";
 import MenuItem from "@mui/material/MenuItem";
+import apiapiVeiculos from "../../../config/axiosConfigVeiculos";
 
 const theme = createTheme({
   palette: {
@@ -20,7 +21,7 @@ const theme = createTheme({
 
 export default function CadastroVeiculos() {
   // Estados controlados
-  const [veiculo, setVeiculo] = useState("");
+  const [nome, setNome] = useState("");
   const [marca, setMarca] = useState("");
   const [placa, setPlaca] = useState("");
   const [tipo, setTipo] = useState("");
@@ -28,6 +29,40 @@ export default function CadastroVeiculos() {
   const [anoFabricacao, setAnoFabricacao] = useState("");
   const [dataEntrada, setDataEntrada] = useState("");
   const [previsao, setPrevisao] = useState("");
+
+  const handleClear = () => {
+    setNome("");
+    setMarca("");
+    setPlaca("");
+    setTipo("");
+    setStatus("");
+    setAnoFabricacao("");
+    setDataEntrada("");
+    setPrevisao("");
+  };
+
+  const handleSubmit = async () => {
+    const payload = {
+      nome,
+      marca,
+      placa,
+      tipo,
+      status,
+      anoFabricacao,
+      dataEntrada,
+      previsao,
+    };
+
+    console.log("Payload sendo enviado:", payload);
+
+    try {
+      const response = await apiapiVeiculos.post("/api/veiculos", payload);
+      console.log("Veículo cadastrado com sucesso:", response.data);
+      handleClear();
+    } catch (error) {
+      console.error("Erro ao cadastrar veículo:", error);
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -53,27 +88,9 @@ export default function CadastroVeiculos() {
             label="Veículo"
             variant="outlined"
             fullWidth
-            value={veiculo}
-            onChange={(e) => setVeiculo(e.target.value)}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#08005B",
-                },
-              },
-              "& .MuiInputLabel-root": {
-                color: "#08005B",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#08005B",
-              },
-            }}
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+            sx={muiStyles}
           />
           <TextField
             label="Marca"
@@ -81,25 +98,7 @@ export default function CadastroVeiculos() {
             fullWidth
             value={marca}
             onChange={(e) => setMarca(e.target.value)}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#08005B",
-                },
-              },
-              "& .MuiInputLabel-root": {
-                color: "#08005B",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#08005B",
-              },
-            }}
+            sx={muiStyles}
           />
           <TextField
             label="Placa"
@@ -107,25 +106,7 @@ export default function CadastroVeiculos() {
             fullWidth
             value={placa}
             onChange={(e) => setPlaca(e.target.value)}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#08005B",
-                },
-              },
-              "& .MuiInputLabel-root": {
-                color: "#08005B",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#08005B",
-              },
-            }}
+            sx={muiStyles}
           />
           <TextField
             label="Tipo"
@@ -134,25 +115,7 @@ export default function CadastroVeiculos() {
             fullWidth
             value={tipo}
             onChange={(e) => setTipo(e.target.value)}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#08005B",
-                },
-              },
-              "& .MuiInputLabel-root": {
-                color: "#08005B",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#08005B",
-              },
-            }}
+            sx={muiStyles}
           >
             <MenuItem value="Carro">Carro</MenuItem>
             <MenuItem value="Moto">Moto</MenuItem>
@@ -165,28 +128,11 @@ export default function CadastroVeiculos() {
             fullWidth
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#08005B",
-                },
-              },
-              "& .MuiInputLabel-root": {
-                color: "#08005B",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#08005B",
-              },
-            }}
+            sx={muiStyles}
           >
-            <MenuItem value="Ativo">Ativo</MenuItem>
-            <MenuItem value="Inativo">Inativo</MenuItem>
+            <MenuItem value="Ativo">Manutenção</MenuItem>
+            <MenuItem value="Inativo">Espera</MenuItem>
+            <MenuItem value="Ativo">Liberado</MenuItem>
           </TextField>
           <TextField
             label="Ano Fabricação"
@@ -194,27 +140,8 @@ export default function CadastroVeiculos() {
             fullWidth
             value={anoFabricacao}
             onChange={(e) => setAnoFabricacao(e.target.value)}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#08005B",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#08005B",
-                },
-              },
-              "& .MuiInputLabel-root": {
-                color: "#08005B",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#08005B",
-              },
-            }}
+            sx={muiStyles}
           />
-
           <Box
             sx={{
               display: "flex",
@@ -223,64 +150,27 @@ export default function CadastroVeiculos() {
             }}
           >
             <TextField
-            label="Data Entrada"
-            type="date"
-            variant="outlined"
-            fullWidth
-            value={dataEntrada}
-            onChange={(e) => setDataEntrada(e.target.value)}
-            InputLabelProps={{
-                shrink: true, // Isso garante que o label não sobreponha o valor
-            }}
-            sx={{
-                "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                    borderColor: "#08005B",
-                },
-                "&:hover fieldset": {
-                    borderColor: "#08005B",
-                },
-                "&.Mui-focused fieldset": {
-                    borderColor: "#08005B",
-                },
-                },
-                "& .MuiInputLabel-root": {
-                color: "#08005B",
-                },
-                "& .MuiInputLabel-root.Mui-focused": {
-                color: "#08005B",
-                },
-            }}
+              label="Data Entrada"
+              type="date"
+              variant="outlined"
+              fullWidth
+              value={dataEntrada}
+              onChange={(e) => setDataEntrada(e.target.value)}
+              InputLabelProps={{ shrink: true }}
+              sx={muiStyles}
             />
-
+            
             <TextField
               label="Previsão"
+              type="date"
               variant="outlined"
               fullWidth
               value={previsao}
               onChange={(e) => setPrevisao(e.target.value)}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "#08005B",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#08005B",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#08005B",
-                  },
-                },
-                "& .MuiInputLabel-root": {
-                  color: "#08005B",
-                },
-                "& .MuiInputLabel-root.Mui-focused": {
-                  color: "#08005B",
-                },
-              }}
+              InputLabelProps={{ shrink: true }}
+              sx={muiStyles}
             />
           </Box>
-
           <Box
             sx={{
               display: "flex",
@@ -291,80 +181,96 @@ export default function CadastroVeiculos() {
           >
             <Button
               variant="outlined"
-              sx={{
-                borderColor: "#08005B",
-                color: "#08005B",
-                padding: "12px 24px",
-                fontSize: "16px",
-                width: "150px",
-                height: "50px",
-                "&:hover": {
-                  borderColor: "#08005B",
-                  color: "#08005B",
-                },
-              }}
+              sx={buttonStyles.outlined}
+              onClick={handleClear}
             >
               Limpar
             </Button>
-
             <Button
               variant="contained"
-              sx={{
-                backgroundColor: "#08005B",
-                color: "#FFF",
-                padding: "12px 24px",
-                fontSize: "16px",
-                width: "150px",
-                height: "50px",
-                "&:hover": {
-                  backgroundColor: "#08005B",
-                },
-              }}
+              sx={buttonStyles.contained}
+              onClick={handleSubmit}
             >
               Enviar
             </Button>
           </Box>
         </Box>
-
         <Link href="/veiculos" passHref>
-          <Button
-            variant="contained"
-            sx={{
-              position: "absolute",
-              bottom: "16px",
-              right: "16px",
-              backgroundColor: "#08005B",
-              color: "#FFF",
-              padding: "12px 24px",
-              fontSize: "16px",
-              "&:hover": {
-                backgroundColor: "#08005B",
-              },
-            }}
-          >
+          <Button variant="contained" sx={menuButtonStyles}>
             Menu
           </Button>
         </Link>
         <Link href="/veiculos/tabela" passHref>
-          <Button
-            variant="contained"
-            sx={{
-              position: "absolute",
-              bottom: "16px",
-              right: "150px",
-              backgroundColor: "#08005B",
-              color: "#FFF",
-              padding: "12px 24px",
-              fontSize: "16px",
-              "&:hover": {
-                backgroundColor: "#08005B",
-              },
-            }}
-          >
+          <Button variant="contained" sx={tabelaButtonStyles}>
             Tabela
           </Button>
-          </Link>
+        </Link>
       </Box>
     </ThemeProvider>
   );
 }
+
+const muiStyles = {
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#08005B",
+    },
+    "&:hover fieldset": {
+      borderColor: "#08005B",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#08005B",
+    },
+  },
+  "& .MuiInputLabel-root": {
+    color: "#08005B",
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: "#08005B",
+  },
+};
+
+const buttonStyles = {
+  outlined: {
+    borderColor: "#08005B",
+    color: "#08005B",
+    padding: "12px 24px",
+    fontSize: "16px",
+    width: "150px",
+    height: "50px",
+  },
+  contained: {
+    backgroundColor: "#08005B",
+    color: "#FFF",
+    padding: "12px 24px",
+    fontSize: "16px",
+    width: "150px",
+    height: "50px",
+  },
+};
+
+const menuButtonStyles = {
+  position: "absolute",
+  bottom: "16px",
+  right: "16px",
+  backgroundColor: "#08005B",
+  color: "#FFF",
+  padding: "12px 24px",
+  fontSize: "16px",
+  "&:hover": {
+    backgroundColor: "#08005B",
+  },
+};
+
+const tabelaButtonStyles = {
+  position: "absolute",
+  bottom: "16px",
+  right: "150px",
+  backgroundColor: "#08005B",
+  color: "#FFF",
+  padding: "12px 24px",
+  fontSize: "16px",
+  "&:hover": {
+    backgroundColor: "#08005B",
+  },
+};
