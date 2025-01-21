@@ -1,79 +1,70 @@
-import React from "react";
-import TabelaComponente from "../../../components/TabelaComponente";
+"use client"; // Ativa o comportamento de cliente
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Button from "@mui/material/Button"; // Importação do Button
+import Button from "@mui/material/Button";
+import api from "../../../config/axiosConfigVeiculos"; // Conexão com a API de veículos
+import TabelaVeiculos from "../../../components/TabelaVeiculos"; // Importando o componente de tabela
 
 const App: React.FC = () => {
+  const [veiculos, setVeiculos] = useState<any[]>([]); // Use any[] ou um tipo adequado
+  const [loading, setLoading] = useState(true);
+
   const headers = [
     { label: "ID", key: "id" },
-    { label: "Veículo", key: "veiculo" },
+    { label: "Veículo", key: "nome" },
     { label: "Placa", key: "placa" },
     { label: "Tipo", key: "tipo" },
     { label: "Status", key: "status" },
     { label: "Data de Entrada", key: "dataEntrada" },
   ];
 
-  const data = [
-    {
-      id: 1,
-      veiculo: "Toyota Corolla",
-      placa: "ABC-1234",
-      tipo: "Sedan",
-      status: "Em manutenção",
-      dataEntrada: "10/01/2025",
-    },
-    {
-      id: 2,
-      veiculo: "Honda Civic",
-      placa: "DEF-5678",
-      tipo: "Sedan",
-      status: "Finalizado",
-      dataEntrada: "08/01/2025",
-    },
-    {
-      id: 3,
-      veiculo: "Ford Ranger",
-      placa: "GHI-9012",
-      tipo: "Caminhonete",
-      status: "Pendente",
-      dataEntrada: "12/01/2025",
-    },
-    {
-      id: 4,
-      veiculo: "Volkswagen Golf",
-      placa: "JKL-3456",
-      tipo: "Hatch",
-      status: "Em manutenção",
-      dataEntrada: "11/01/2025",
-    },
-    {
-      id: 5,
-      veiculo: "Chevrolet Onix",
-      placa: "MNO-7890",
-      tipo: "Hatch",
-      status: "Finalizado",
-      dataEntrada: "09/01/2025",
-    },
-  ];
+  // Função para buscar veículos da API
+  const fetchVeiculos = async () => {
+    try {
+      const response = await api.get("/api/veiculos"); // Ajuste conforme o endpoint da API
+      console.log("Veículos recebidos:", response.data);
+      setVeiculos(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Erro ao buscar veículos:", error);
+      setLoading(false);
+    }
+  };
+
+  // Função para deletar um veículo
+  const handleDelete = async (id: number) => {
+    try {
+      await api.delete(`/api/veiculos/${id}`); // Ajuste conforme o endpoint da API
+      console.log(`Veículo com ID ${id} apagado com sucesso.`);
+      setVeiculos(veiculos.filter((veiculo) => veiculo.id !== id)); // Atualiza a lista de veículos
+    } catch (error) {
+      console.error(`Erro ao apagar veículo com ID ${id}:`, error);
+    }
+  };
+
+  // Usando useEffect para buscar os dados ao montar o componente
+  useEffect(() => {
+    fetchVeiculos();
+  }, []);
+
+  if (loading) {
+    return <div>Carregando...</div>; // Mensagem enquanto os dados estão sendo carregados
+  }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        height: "100vh",
-        backgroundColor: "#E9E9E9",
-      }}
-    >
-      <main
-        style={{
-          flex: 1,
-          padding: "20px",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+    <div style={{ display: "flex", height: "100vh", backgroundColor: "#E9E9E9" }}>
+      <main style={{ flex: 1, padding: "20px", display: "flex", flexDirection: "column" }}>
         <h1 style={{ color: "#08005B" }}>Gerenciamento de Veículos</h1>
-        <TabelaComponente headers={headers} data={data} rowsPerPage={5} />
+        
+        {/* Usando o componente TabelaVeiculos com os dados dinâmicos */}
+        <TabelaVeiculos 
+          headers={headers} 
+          data={veiculos} 
+          rowsPerPage={5} 
+          onDelete={handleDelete} // Passa a função de deleção
+        />
+        
         <Link href="/veiculos" passHref>
           <Button
             variant="contained"
@@ -111,7 +102,7 @@ const App: React.FC = () => {
           >
             Cadastro
           </Button>
-          </Link>
+        </Link>
       </main>
     </div>
   );
