@@ -1,10 +1,9 @@
 import Card from '../../components/card';
 import Link from 'next/link';
 
-
-export default function Veiculos() {
-    return (
-      <div
+export default function Cliente() {
+  return (
+    <div
       style={{
         backgroundColor: '#E9E9E9',
         height: '100vh', 
@@ -17,22 +16,35 @@ export default function Veiculos() {
         gap: '80px',
       }}
     >
-    <Link
-      href="/veiculos/cadastro"
-      style={{
-        textDecoration: 'none',
-        color: 'inherit',
-      }}
-    >
-      <Card icon="plus.png" text="Novo Veiculo" />
-    </Link>
-    <Link href="/veiculos/tabela"       style={{
-        textDecoration: 'none',
-        color: 'inherit',
-      }}>
-      <Card icon="Notepad.png" text="Gerenciar Veiculos" />
+      <Link
+        href="/veiculos/cadastro"
+        style={{
+          textDecoration: 'none',
+          color: 'inherit',
+        }}
+      >
+        <Card icon="plus.png" text="Novo Veiculo" />
+      </Link> 
+      
+      <Link
+        href="/veiculos/tabela"
+        style={{
+          textDecoration: 'none',
+          color: 'inherit',
+        }}
+      >
+        <Card icon="Notepad.png" text="Gerenciar veiculos" />
+      </Link>
+      
+      <Link
+        href="/veiculos/editar"
+        style={{
+          textDecoration: 'none',
+          color: 'inherit',
+        }}
+      >
+        <Card icon="unnamed.png" text="Editar veiculos" />
       </Link>
     </div>
-    );
-  }
-  
+  );
+}
