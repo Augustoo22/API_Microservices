@@ -1,3 +1,5 @@
+"use client"; // Adicione esta linha no topo do arquivo
+
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/compat/router";
 
@@ -37,14 +39,6 @@ const ClienteTabela: React.FC<Props> = ({ headers, data, rowsPerPage = 5, onDele
 
   const startIndex = (currentPage - 1) * rowsPerPage;
   const paginatedData = data.slice(startIndex, startIndex + rowsPerPage);
-
-  const handleEdit = (id: number) => {
-    if (router && id) {
-      console.log("Redirecionando para a edição do cliente com ID:", id); // Verifique se o ID está sendo capturado corretamente
-      router.push(`/clientes/editar/${id}`); // Direciona para a página de edição
-    }
-  };
-  
 
   return (
     <div>
@@ -89,7 +83,7 @@ const ClienteTabela: React.FC<Props> = ({ headers, data, rowsPerPage = 5, onDele
         <tbody>
           {paginatedData.map((row, rowIndex) => (
             <tr
-              key={row.id ? row.id : `row-${rowIndex}`}
+              key={row.id !== undefined ? row.id : `row-${rowIndex}`}
               style={{
                 backgroundColor: rowIndex % 2 === 0 ? "#FFFFFF" : "#08005B",
                 color: rowIndex % 2 === 0 ? "#08005B" : "#FFFFFF",
@@ -104,7 +98,7 @@ const ClienteTabela: React.FC<Props> = ({ headers, data, rowsPerPage = 5, onDele
                     textAlign: "center",
                   }}
                 >
-                  {row[header.key]}
+                  {row[header.key] !== undefined ? row[header.key] : "-"}
                 </td>
               ))}
               <td
@@ -116,7 +110,6 @@ const ClienteTabela: React.FC<Props> = ({ headers, data, rowsPerPage = 5, onDele
               >
                 <button
                   style={{
-                    marginRight: "8px",
                     backgroundColor: rowIndex % 2 === 0 ? "#08005B" : "#FFFFFF",
                     color: rowIndex % 2 === 0 ? "#FFFFFF" : "#08005B",
                     border: "none",
@@ -125,21 +118,7 @@ const ClienteTabela: React.FC<Props> = ({ headers, data, rowsPerPage = 5, onDele
                     cursor: "pointer",
                     height: "45px",
                   }}
-                  onClick={() => handleEdit(row.id)} // Chama a função handleEdit
-                >
-                  Editar
-                </button>
-                <button
-                  style={{
-                    backgroundColor: rowIndex % 2 === 0 ? "#08005B" : "#FFFFFF",
-                    color: rowIndex % 2 === 0 ? "#FFFFFF" : "#08005B",
-                    border: "none",
-                    padding: "5px 10px",
-                    borderRadius: "15px",
-                    cursor: "pointer",
-                    height: "45px",
-                  }}
-                  onClick={() => onDelete(row.id)} // Chama a função onDelete
+                  onClick={() => onDelete(row.id !== undefined ? row.id : 0)} // Verifica se o id está definido antes de usá-lo
                 >
                   Apagar
                 </button>

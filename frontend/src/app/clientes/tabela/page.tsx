@@ -99,6 +99,25 @@ const App: React.FC = () => {
             Cadastro
           </Button>
         </Link>
+        <Link href="/clientes/editar" passHref>
+          <Button
+            variant="contained"
+            sx={{
+              position: "absolute",
+              bottom: "16px",
+              right: "330px",
+              backgroundColor: "#08005B",
+              color: "#FFF",
+              padding: "12px 24px",
+              fontSize: "16px",
+              "&:hover": {
+                backgroundColor: "#08005B",
+              },
+            }}
+          >
+            Editar
+          </Button>
+        </Link>
       </main>
     </div>
   );

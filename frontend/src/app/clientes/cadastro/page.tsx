@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -7,6 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Link from "next/link";
 import api from "../../../config/axiosConfigCliente";
+import apiVeiculos from "../../../config/axiosConfigVeiculos";
 
 const theme = createTheme({
   palette: {
@@ -23,6 +24,21 @@ export default function CadastroClientes() {
     cpf: "",
     dataNascimento: "",
   });
+  const [veiculos, setVeiculos] = useState([]); // Lista de veículos para o Select
+
+  useEffect(() => {
+    // Função para buscar os veículos disponíveis
+    const fetchVeiculos = async () => {
+      try {
+        const response = await apiVeiculos.get("/api/veiculos");
+        setVeiculos(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar veículos:", error);
+      }
+    };
+
+    fetchVeiculos();
+  }, []);
 
   const handleVeiculoChange = (index, value) => {
     setVeiculosSelecionados((prevState) => ({
@@ -142,9 +158,11 @@ export default function CadastroClientes() {
               onChange={(e) => handleVeiculoChange(index, e.target.value)}
               sx={muiStyles}
             >
-              <MenuItem value="Carro A">Carro A</MenuItem>
-              <MenuItem value="Carro B">Carro B</MenuItem>
-              <MenuItem value="Moto C">Moto C</MenuItem>
+              {veiculos.map((veiculo) => (
+                <MenuItem key={veiculo.id} value={veiculo.id}>
+                  {`${veiculo.nome} - ${veiculo.placa}`}
+                </MenuItem>
+              ))}
             </TextField>
           ))}
 
@@ -169,44 +187,64 @@ export default function CadastroClientes() {
             </Button>
           </Box>
         </Box>
-        <Link href="/clientes" passHref>
-          <Button
-            variant="contained"
-            sx={{
-              position: "absolute",
-              bottom: "16px",
-              right: "16px",
-              backgroundColor: "#08005B",
-              color: "#FFF",
-              padding: "12px 24px",
-              fontSize: "16px",
-              "&:hover": {
-                backgroundColor: "#08005B",
-              },
-            }}
-          >
-            Menu
-          </Button>
-        </Link>
-        <Link href="/clientes/tabela" passHref>
-          <Button
-            variant="contained"
-            sx={{
-              position: "absolute",
-              bottom: "16px",
-              right: "150px",
-              backgroundColor: "#08005B",
-              color: "#FFF",
-              padding: "12px 24px",
-              fontSize: "16px",
-              "&:hover": {
-                backgroundColor: "#08005B",
-              },
-            }}
-          >
-            Tabela
-          </Button>
-        </Link>
+          <div
+    style={{
+      position: "absolute",
+      bottom: "16px",
+      right: "16px",
+      display: "flex",
+      gap: "24px", // Espaçamento uniforme entre os botões
+    }}
+  >
+    <Link href="/clientes" passHref>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: "#08005B",
+          color: "#FFF",
+          padding: "12px 24px",
+          fontSize: "16px",
+          "&:hover": {
+            backgroundColor: "#08005B",
+          },
+        }}
+      >
+        Menu
+      </Button>
+    </Link>
+    <Link href="/clientes/tabela" passHref>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: "#08005B",
+          color: "#FFF",
+          padding: "12px 24px",
+          fontSize: "16px",
+          "&:hover": {
+            backgroundColor: "#08005B",
+          },
+        }}
+      >
+        Tabela
+      </Button>
+    </Link>
+    <Link href="/clientes/editar" passHref>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: "#08005B",
+          color: "#FFF",
+          padding: "12px 24px",
+          fontSize: "16px",
+          "&:hover": {
+            backgroundColor: "#08005B",
+          },
+        }}
+      >
+        Editar
+      </Button>
+    </Link>
+  </div>
       </Box>
     </ThemeProvider>
   );
