@@ -65,44 +65,64 @@ const App: React.FC = () => {
           onDelete={handleDelete} // Passa a função de deleção
         />
         
-        <Link href="/veiculos" passHref>
-          <Button
-            variant="contained"
-            sx={{
-              position: "absolute",
-              bottom: "16px",
-              right: "16px",
-              backgroundColor: "#08005B",
-              color: "#FFF",
-              padding: "12px 24px",
-              fontSize: "16px",
-              "&:hover": {
-                backgroundColor: "#08005B",
-              },
-            }}
-          >
-            Menu
-          </Button>
-        </Link>
-        <Link href="/veiculos/cadastro" passHref>
-          <Button
-            variant="contained"
-            sx={{
-              position: "absolute",
-              bottom: "16px",
-              right: "150px",
-              backgroundColor: "#08005B",
-              color: "#FFF",
-              padding: "12px 24px",
-              fontSize: "16px",
-              "&:hover": {
-                backgroundColor: "#08005B",
-              },
-            }}
-          >
-            Cadastro
-          </Button>
-        </Link>
+  <div
+    style={{
+      position: "absolute",
+      bottom: "16px",
+      right: "16px",
+      display: "flex",
+      gap: "24px", // Espaçamento uniforme entre os botões
+    }}
+  >
+    <Link href="/veiculos" passHref>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: "#08005B",
+          color: "#FFF",
+          padding: "12px 24px",
+          fontSize: "16px",
+          "&:hover": {
+            backgroundColor: "#08005B",
+          },
+        }}
+      >
+        Menu
+      </Button>
+    </Link>
+    <Link href="/veiculos/cadastro" passHref>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: "#08005B",
+          color: "#FFF",
+          padding: "12px 24px",
+          fontSize: "16px",
+          "&:hover": {
+            backgroundColor: "#08005B",
+          },
+        }}
+      >
+        Cadastro
+      </Button>
+    </Link>
+    <Link href="/veiculos/editar" passHref>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: "#08005B",
+          color: "#FFF",
+          padding: "12px 24px",
+          fontSize: "16px",
+          "&:hover": {
+            backgroundColor: "#08005B",
+          },
+        }}
+      >
+        Editar
+      </Button>
+    </Link>
+  </div>
       </main>
     </div>
   );

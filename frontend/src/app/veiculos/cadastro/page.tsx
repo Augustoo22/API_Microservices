@@ -195,16 +195,64 @@ export default function CadastroVeiculos() {
             </Button>
           </Box>
         </Box>
-        <Link href="/veiculos" passHref>
-          <Button variant="contained" sx={menuButtonStyles}>
-            Menu
-          </Button>
-        </Link>
-        <Link href="/veiculos/tabela" passHref>
-          <Button variant="contained" sx={tabelaButtonStyles}>
-            Tabela
-          </Button>
-        </Link>
+          <div
+    style={{
+      position: "absolute",
+      bottom: "16px",
+      right: "16px",
+      display: "flex",
+      gap: "24px", // Espaçamento uniforme entre os botões
+    }}
+  >
+    <Link href="/veiculos" passHref>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: "#08005B",
+          color: "#FFF",
+          padding: "12px 24px",
+          fontSize: "16px",
+          "&:hover": {
+            backgroundColor: "#08005B",
+          },
+        }}
+      >
+        Menu
+      </Button>
+    </Link>
+    <Link href="/veiculos/tabela" passHref>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: "#08005B",
+          color: "#FFF",
+          padding: "12px 24px",
+          fontSize: "16px",
+          "&:hover": {
+            backgroundColor: "#08005B",
+          },
+        }}
+      >
+        Tabela
+      </Button>
+    </Link>
+    <Link href="/veiculos/editar" passHref>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: "#08005B",
+          color: "#FFF",
+          padding: "12px 24px",
+          fontSize: "16px",
+          "&:hover": {
+            backgroundColor: "#08005B",
+          },
+        }}
+      >
+        Editar
+      </Button>
+    </Link>
+  </div>
       </Box>
     </ThemeProvider>
   );
