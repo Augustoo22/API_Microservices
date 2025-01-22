@@ -1,7 +1,6 @@
 import Card from '../../components/card';
 import Link from 'next/link';
 
-
 export default function Cliente() {
   return (
     <div
@@ -18,20 +17,34 @@ export default function Cliente() {
       }}
     >
       <Link
-      href="/clientes/cadastro"
-      style={{
-        textDecoration: 'none',
-        color: 'inherit',
-      }}
-    >
-      <Card icon="plus.png" text="Novo Cliente" />
-    </Link> 
-    <Link href="/clientes/tabela"       style={{
-        textDecoration: 'none',
-        color: 'inherit',
-      }}>
-      <Card icon="Notepad.png" text="Gerenciar Clientes" />
-    </Link>
+        href="/clientes/cadastro"
+        style={{
+          textDecoration: 'none',
+          color: 'inherit',
+        }}
+      >
+        <Card icon="plus.png" text="Novo Cliente" />
+      </Link> 
+      
+      <Link
+        href="/clientes/tabela"
+        style={{
+          textDecoration: 'none',
+          color: 'inherit',
+        }}
+      >
+        <Card icon="Notepad.png" text="Gerenciar Clientes" />
+      </Link>
+      
+      <Link
+        href="/clientes/editar"
+        style={{
+          textDecoration: 'none',
+          color: 'inherit',
+        }}
+      >
+        <Card icon="unnamed.png" text="Editar Cliente" />
+      </Link>
     </div>
   );
 }
