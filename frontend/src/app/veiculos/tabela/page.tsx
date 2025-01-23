@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Button from "@mui/material/Button";
 import api from "../../../config/axiosConfigVeiculos"; // Conexão com a API de veículos
-import TabelaVeiculos from "../../../components/TabelaVeiculos"; // Importando o componente de tabela
+import TabelaComponente from "../../../components/TabelaComponente"; // Substituindo por TabelaComponente
 
 const App: React.FC = () => {
   const [veiculos, setVeiculos] = useState<any[]>([]); // Use any[] ou um tipo adequado
@@ -57,72 +57,72 @@ const App: React.FC = () => {
       <main style={{ flex: 1, padding: "20px", display: "flex", flexDirection: "column" }}>
         <h1 style={{ color: "#08005B" }}>Gerenciamento de Veículos</h1>
         
-        {/* Usando o componente TabelaVeiculos com os dados dinâmicos */}
-        <TabelaVeiculos 
+        {/* Substituindo TabelaVeiculos por TabelaComponente */}
+        <TabelaComponente 
           headers={headers} 
           data={veiculos} 
           rowsPerPage={5} 
           onDelete={handleDelete} // Passa a função de deleção
         />
         
-  <div
-    style={{
-      position: "absolute",
-      bottom: "16px",
-      right: "16px",
-      display: "flex",
-      gap: "24px", // Espaçamento uniforme entre os botões
-    }}
-  >
-    <Link href="/veiculos" passHref>
-      <Button
-        variant="contained"
-        sx={{
-          backgroundColor: "#08005B",
-          color: "#FFF",
-          padding: "12px 24px",
-          fontSize: "16px",
-          "&:hover": {
-            backgroundColor: "#08005B",
-          },
-        }}
-      >
-        Menu
-      </Button>
-    </Link>
-    <Link href="/veiculos/cadastro" passHref>
-      <Button
-        variant="contained"
-        sx={{
-          backgroundColor: "#08005B",
-          color: "#FFF",
-          padding: "12px 24px",
-          fontSize: "16px",
-          "&:hover": {
-            backgroundColor: "#08005B",
-          },
-        }}
-      >
-        Cadastro
-      </Button>
-    </Link>
-    <Link href="/veiculos/editar" passHref>
-      <Button
-        variant="contained"
-        sx={{
-          backgroundColor: "#08005B",
-          color: "#FFF",
-          padding: "12px 24px",
-          fontSize: "16px",
-          "&:hover": {
-            backgroundColor: "#08005B",
-          },
-        }}
-      >
-        Editar
-      </Button>
-    </Link>
-  </div>
+        <div
+          style={{
+            position: "absolute",
+            bottom: "16px",
+            right: "16px",
+            display: "flex",
+            gap: "24px", // Espaçamento uniforme entre os botões
+          }}
+        >
+          <Link href="/veiculos" passHref>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#08005B",
+                color: "#FFF",
+                padding: "12px 24px",
+                fontSize: "16px",
+                "&:hover": {
+                  backgroundColor: "#08005B",
+                },
+              }}
+            >
+              Menu
+            </Button>
+          </Link>
+          <Link href="/veiculos/cadastro" passHref>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#08005B",
+                color: "#FFF",
+                padding: "12px 24px",
+                fontSize: "16px",
+                "&:hover": {
+                  backgroundColor: "#08005B",
+                },
+              }}
+            >
+              Cadastro
+            </Button>
+          </Link>
+          <Link href="/veiculos/editar" passHref>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#08005B",
+                color: "#FFF",
+                padding: "12px 24px",
+                fontSize: "16px",
+                "&:hover": {
+                  backgroundColor: "#08005B",
+                },
+              }}
+            >
+              Editar
+            </Button>
+          </Link>
+        </div>
       </main>
     </div>
   );

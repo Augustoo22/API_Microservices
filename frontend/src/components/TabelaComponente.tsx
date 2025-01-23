@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import React, { useState } from "react";
 
@@ -11,7 +11,7 @@ type Props = {
   headers: Header[];
   data: Array<Record<string, string | number | undefined>>;
   rowsPerPage?: number;
-  onDelete: (id: number) => void;  // Função para apagar cliente
+  onDelete: (id: number) => void; // Função para apagar cliente
 };
 
 type Filters = {
@@ -55,7 +55,7 @@ const TabelaComponente: React.FC<Props> = ({ headers, data, rowsPerPage = 5, onD
           placeholder={headers[1].label}
           value={filters.filter1}
           onChange={handleFilterChange}
-          style={{ padding: "5px", marginRight: "10px", border: "3px solid #08005B", borderRadius:"10px", height: "20px" }}
+          style={{ padding: "5px", marginRight: "10px", border: "3px solid #08005B", borderRadius: "10px", height: "20px" }}
         />
         <input
           type="text"
@@ -63,7 +63,7 @@ const TabelaComponente: React.FC<Props> = ({ headers, data, rowsPerPage = 5, onD
           placeholder={headers[2].label}
           value={filters.filter2}
           onChange={handleFilterChange}
-          style={{ padding: "5px", border: "3px solid #08005B", borderRadius:"10px", height: "20px" }}
+          style={{ padding: "5px", border: "3px solid #08005B", borderRadius: "10px", height: "20px" }}
         />
       </div>
 
@@ -133,21 +133,6 @@ const TabelaComponente: React.FC<Props> = ({ headers, data, rowsPerPage = 5, onD
                   textAlign: "center",
                 }}
               >
-                <button
-                  style={{
-                    marginRight: "8px",
-                    backgroundColor: rowIndex % 2 === 0 ? "#08005B" : "#FFFFFF",
-                    color: rowIndex % 2 === 0 ? "#FFFFFF" : "#08005B",
-                    border: "none",
-                    padding: "5px 10px",
-                    borderRadius: "15px",
-                    cursor: "pointer",
-                    height: "45px",
-                  }}
-                  onClick={() => console.log("Editar", row.id)}
-                >
-                  Editar
-                </button>
                 <button
                   style={{
                     backgroundColor: rowIndex % 2 === 0 ? "#08005B" : "#FFFFFF",

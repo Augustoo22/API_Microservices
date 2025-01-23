@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Button from "@mui/material/Button";
 import api from "../../../config/axiosConfigCliente";
-import ClienteTabela from "../../../components/ClienteTabela"; // Importando o componente de tabela
+import TabelaComponente from "../../../components/TabelaComponente"; // Importando o novo componente de tabela
 
 const App: React.FC = () => {
   const [clientes, setClientes] = useState<any[]>([]); // Use any[] ou um tipo adequado
@@ -54,8 +54,8 @@ const App: React.FC = () => {
       <main style={{ flex: 1, padding: "20px", display: "flex", flexDirection: "column" }}>
         <h1 style={{ color: "#08005B" }}>Gerenciamento de Clientes</h1>
 
-        {/* Usando o componente ClienteTabela */}
-        <ClienteTabela
+        {/* Usando o novo componente TabelaComponente */}
+        <TabelaComponente
           headers={headers}
           data={clientes}
           onDelete={handleDelete} // Passando a função onDelete
