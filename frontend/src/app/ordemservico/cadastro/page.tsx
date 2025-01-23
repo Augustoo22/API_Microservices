@@ -1,51 +1,78 @@
-'use client';
-
-import React, { useState } from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Link from 'next/link';
+import Link from "next/link";
+import api from "../../../config/axiosConfigOrdemServico"; // Configuração para Ordem de Serviço
+import apiVeiculos from "../../../config/axiosConfigVeiculos"; // Configuração para Veículos
 
 const theme = createTheme({
   palette: {
-    primary: {
-      main: "#08005B",
-    },
-    secondary: {
-      main: "#08005B",
-    },
+    primary: { main: "#08005B" },
+    secondary: { main: "#08005B" },
   },
 });
 
 export default function CadastroOrdemServico() {
-  const [quantidadeFuncionarios, setQuantidadeFuncionarios] = useState(1);
-  const [funcionariosSelecionados, setFuncionariosSelecionados] = useState({});
   const [formData, setFormData] = useState({
-    veiculo: "",
+    veiculo: "", // ID do veículo
     servico: "",
     dataInicio: "",
     dataTermino: "",
     descricaoServico: "",
     statusOS: "",
   });
+  const [veiculos, setVeiculos] = useState([]); // Lista de veículos para o Select
 
-  // Função para manipular mudanças de inputs
+  useEffect(() => {
+    // Função para buscar os veículos cadastrados
+    const fetchVeiculos = async () => {
+      try {
+        const response = await apiVeiculos.get("/api/veiculos");
+        setVeiculos(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar veículos:", error);
+      }
+    };
+
+    fetchVeiculos();
+  }, []);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Função para atualizar os funcionários selecionados
-  const handleFuncionarioChange = (index, value) => {
-    setFuncionariosSelecionados((prevState) => ({
-      ...prevState,
-      [index]: value,
-    }));
+  const handleClear = () => {
+    setFormData({
+      veiculo: "",
+      servico: "",
+      dataInicio: "",
+      dataTermino: "",
+      descricaoServico: "",
+      statusOS: "",
+    });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      // Certifique-se de que `veiculo` está como ID
+      const payload = {
+        ...formData,
+        veiculo: parseInt(formData.veiculo, 10), // Converte para número, se necessário
+      };
+
+      console.log("Enviando dados para o backend:", payload);
+
+      const response = await api.post("/api/ordemServico", payload);
+      console.log("Ordem de serviço cadastrada:", response.data);
+      handleClear(); 
+    } catch (error) {
+      console.error("Erro ao cadastrar ordem de serviço:", error);
+    }
   };
 
   return (
@@ -66,30 +93,35 @@ export default function CadastroOrdemServico() {
             marginLeft: "25px",
           }}
         >
-          <h1 style={{ textAlign: "left", color: "#08005B" }}>
-            Cadastro Ordem de Serviço
-          </h1>
+          <h1 style={{ textAlign: "left", color: "#08005B" }}>Cadastro Ordem de Serviço</h1>
 
           {/* Veículo */}
           <TextField
             label="Veículo"
             name="veiculo"
-            value={formData.veiculo}
-            onChange={handleInputChange}
+            select
             variant="outlined"
             fullWidth
-            sx={textFieldStyles}
-          />
+            value={formData.veiculo}
+            onChange={handleInputChange}
+            sx={muiStyles}
+          >
+            {veiculos.map((veiculo) => (
+              <MenuItem key={veiculo.id} value={veiculo.id}>
+                {`${veiculo.nome} - ${veiculo.placa}`}
+              </MenuItem>
+            ))}
+          </TextField>
 
           {/* Serviço */}
           <TextField
             label="Serviço"
             name="servico"
-            value={formData.servico}
-            onChange={handleInputChange}
             variant="outlined"
             fullWidth
-            sx={textFieldStyles}
+            value={formData.servico}
+            onChange={handleInputChange}
+            sx={muiStyles}
           />
 
           {/* Data de Início */}
@@ -97,14 +129,12 @@ export default function CadastroOrdemServico() {
             label="Data de Início"
             name="dataInicio"
             type="date"
-            value={formData.dataInicio}
-            onChange={handleInputChange}
             variant="outlined"
             fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-            sx={textFieldStyles}
+            InputLabelProps={{ shrink: true }}
+            value={formData.dataInicio}
+            onChange={handleInputChange}
+            sx={muiStyles}
           />
 
           {/* Data de Término */}
@@ -112,73 +142,40 @@ export default function CadastroOrdemServico() {
             label="Data de Término"
             name="dataTermino"
             type="date"
+            variant="outlined"
+            fullWidth
+            InputLabelProps={{ shrink: true }}
             value={formData.dataTermino}
             onChange={handleInputChange}
-            variant="outlined"
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-            sx={textFieldStyles}
+            sx={muiStyles}
           />
 
-          {/* Descrição Serviço */}
+          {/* Descrição do Serviço */}
           <TextField
-            label="Descrição Serviço"
+            label="Descrição do Serviço"
             name="descricaoServico"
+            variant="outlined"
+            fullWidth
             value={formData.descricaoServico}
             onChange={handleInputChange}
-            variant="outlined"
-            fullWidth
-            sx={textFieldStyles}
+            sx={muiStyles}
           />
 
-          {/* Status O.S */}
+          {/* Status */}
           <TextField
-            label="Status O.S"
+            label="Status O.S."
             name="statusOS"
+            select
+            variant="outlined"
+            fullWidth
             value={formData.statusOS}
             onChange={handleInputChange}
-            variant="outlined"
-            fullWidth
-            sx={textFieldStyles}
-          />
-
-          {/* Quantidade de Funcionários */}
-          <TextField
-            label="Quantidade Funcionário"
-            select
-            value={quantidadeFuncionarios}
-            onChange={(e) => setQuantidadeFuncionarios(parseInt(e.target.value))}
-            variant="outlined"
-            fullWidth
-            sx={textFieldStyles}
+            sx={muiStyles}
           >
-            {[1, 2, 3, 4, 5].map((value) => (
-              <MenuItem key={value} value={value}>
-                {value}
-              </MenuItem>
-            ))}
+            <MenuItem value="Pendente">Pendente</MenuItem>
+            <MenuItem value="Em andamento">Em andamento</MenuItem>
+            <MenuItem value="Concluído">Concluído</MenuItem>
           </TextField>
-
-          {/* Campos Dinâmicos para Funcionários */}
-          {Array.from({ length: quantidadeFuncionarios }).map((_, index) => (
-            <TextField
-              key={index}
-              label={`Funcionário ${index + 1}`}
-              select
-              value={funcionariosSelecionados[index] || ""}
-              onChange={(e) => handleFuncionarioChange(index, e.target.value)}
-              variant="outlined"
-              fullWidth
-              sx={textFieldStyles}
-            >
-              {/* Adicione as opções reais aqui */}
-              <MenuItem value="Funcionario A">Funcionário A</MenuItem>
-              <MenuItem value="Funcionario B">Funcionário B</MenuItem>
-              <MenuItem value="Funcionario C">Funcionário C</MenuItem>
-            </TextField>
-          ))}
 
           {/* Botões */}
           <Box
@@ -189,89 +186,20 @@ export default function CadastroOrdemServico() {
               marginTop: "16px",
             }}
           >
-            <Button
-              variant="outlined"
-              sx={{
-                borderColor: "#08005B",
-                color: "#08005B",
-                padding: "12px 24px",
-                fontSize: "16px",
-              }}
-              onClick={() => {
-                setFormData({
-                  veiculo: "",
-                  servico: "",
-                  dataInicio: "",
-                  dataTermino: "",
-                  descricaoServico: "",
-                  statusOS: "",
-                });
-                setFuncionariosSelecionados({});
-                setQuantidadeFuncionarios(1);
-              }}
-            >
+            <Button variant="outlined" sx={buttonStyles.outlined} onClick={handleClear}>
               Limpar
             </Button>
-
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#08005B",
-                color: "#FFF",
-                padding: "12px 24px",
-                fontSize: "16px",
-              }}
-              onClick={() => console.log("Formulário enviado:", formData)}
-            >
+            <Button variant="contained" sx={buttonStyles.contained} onClick={handleSubmit}>
               Enviar
             </Button>
           </Box>
         </Box>
-        <Link href="/ordemservico" passHref>
-          <Button
-            variant="contained"
-            sx={{
-              position: "absolute",
-              bottom: "16px",
-              right: "16px",
-              backgroundColor: "#08005B",
-              color: "#FFF",
-              padding: "12px 24px",
-              fontSize: "16px",
-              "&:hover": {
-                backgroundColor: "#08005B",
-              },
-            }}
-          >
-            Menu
-          </Button>
-        </Link>
-        <Link href="/ordemservico/tabela" passHref>
-          <Button
-            variant="contained"
-            sx={{
-              position: "absolute",
-              bottom: "16px",
-              right: "150px",
-              backgroundColor: "#08005B",
-              color: "#FFF",
-              padding: "12px 24px",
-              fontSize: "16px",
-              "&:hover": {
-                backgroundColor: "#08005B",
-              },
-            }}
-          >
-            Tabela
-          </Button>
-          </Link>
       </Box>
     </ThemeProvider>
   );
 }
 
-// Estilos reutilizáveis para TextFields
-const textFieldStyles = {
+const muiStyles = {
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
       borderColor: "#08005B",
@@ -288,5 +216,20 @@ const textFieldStyles = {
   },
   "& .MuiInputLabel-root.Mui-focused": {
     color: "#08005B",
+  },
+};
+
+const buttonStyles = {
+  outlined: {
+    borderColor: "#08005B",
+    color: "#08005B",
+    padding: "12px 24px",
+    fontSize: "16px",
+  },
+  contained: {
+    backgroundColor: "#08005B",
+    color: "#FFF",
+    padding: "12px 24px",
+    fontSize: "16px",
   },
 };
