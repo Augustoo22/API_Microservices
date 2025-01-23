@@ -2,8 +2,8 @@ import Card from '../../components/card';
 import Link from 'next/link';
 
 export default function Ordemservico() {
-    return (
-      <div
+  return (
+    <div
       style={{
         backgroundColor: '#E9E9E9',
         height: '100vh', 
@@ -16,25 +16,37 @@ export default function Ordemservico() {
         gap: '80px',
       }}
     >
-    <Link
-      href="/ordemservico/cadastro"
-      style={{
-      textDecoration: 'none',
-      color: 'inherit',
-      }}
+      <Link
+        href="/ordemservico/cadastro"
+        style={{
+          textDecoration: 'none',
+          color: 'inherit',
+        }}
       >
         <Card icon="plus.png" text="Nova Ordem de Serviço" />
-    </Link>    
-    <Link
-      href="/ordemservico/tabela"
-      style={{
-      textDecoration: 'none',
-      color: 'inherit',
-      }}
+      </Link> 
+      
+      <Link
+        href="/ordemservico/tabela"
+        style={{
+          textDecoration: 'none',
+          color: 'inherit',
+        }}
       >
-      <Card icon="Notepad.png" text="Gerenciar Ordem de Serviço" />
-    </Link>
+        <Card icon="Notepad.png" text="Gerenciar Ordem de Serviço" />
+      </Link>
+      
+      <Link
+        href="/ordemservico/editar"
+        style={{
+          textDecoration: 'none',
+          color: 'inherit',
+        }}
+      >
+        <Card icon="unnamed.png" text="Editar Ordem de Serviço" />
+      </Link>
     </div>
-    );
-  }
+  );
+}
+
   
