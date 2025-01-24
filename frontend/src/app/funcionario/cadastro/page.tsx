@@ -1,10 +1,11 @@
-'use client'
-import React from "react";
+'use client';
+import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Link from "next/link";
+import axios from "axios"; // Adicionado Axios para integração com o backend
 
 const theme = createTheme({
   palette: {
@@ -18,6 +19,37 @@ const theme = createTheme({
 });
 
 export default function CadastroFuncionario() {
+  const [formData, setFormData] = useState({
+    nome: "",
+    cpf: "",
+    cargo: "",
+    dataNascimento: "",
+    especialidade: "",
+    anosExperiencia: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post("http://localhost:5050/api/funcionarios", formData); // URL do backend
+      setFormData({
+        nome: "",
+        cpf: "",
+        cargo: "",
+        dataNascimento: "",
+        especialidade: "",
+        anosExperiencia: "",
+      });
+    } catch (error) {
+      console.error("Erro ao cadastrar funcionário:", error.response.data); // Exibe o erro retornado do backend
+      alert("Erro ao cadastrar funcionário. Verifique os dados e tente novamente.");
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -42,6 +74,9 @@ export default function CadastroFuncionario() {
 
           <TextField
             label="Nome Completo"
+            name="nome"
+            value={formData.nome}
+            onChange={handleChange}
             variant="outlined"
             fullWidth
             sx={{
@@ -66,6 +101,9 @@ export default function CadastroFuncionario() {
           />
           <TextField
             label="CPF"
+            name="cpf"
+            value={formData.cpf}
+            onChange={handleChange}
             variant="outlined"
             fullWidth
             sx={{
@@ -90,6 +128,9 @@ export default function CadastroFuncionario() {
           />
           <TextField
             label="Cargo"
+            name="cargo"
+            value={formData.cargo}
+            onChange={handleChange}
             variant="outlined"
             fullWidth
             sx={{
@@ -114,11 +155,11 @@ export default function CadastroFuncionario() {
           />
           <TextField
             label="Data Nascimento"
-            variant="outlined"
+            name="dataNascimento"
+            value={formData.dataNascimento}
+            onChange={handleChange}
             type="date"
-            InputLabelProps={{
-                shrink: true,
-            }}
+            InputLabelProps={{ shrink: true }}
             fullWidth
             sx={{
               "& .MuiOutlinedInput-root": {
@@ -126,7 +167,7 @@ export default function CadastroFuncionario() {
                   borderColor: "#08005B",
                 },
                 "&:hover fieldset": {
-                  borderColor: "#4A00E0",
+                  borderColor: "#08005B",
                 },
                 "&.Mui-focused fieldset": {
                   borderColor: "#08005B",
@@ -151,6 +192,9 @@ export default function CadastroFuncionario() {
           >
             <TextField
               label="Especialidade"
+              name="especialidade"
+              value={formData.especialidade}
+              onChange={handleChange}
               variant="outlined"
               sx={{
                 flex: 1,
@@ -175,6 +219,9 @@ export default function CadastroFuncionario() {
             />
             <TextField
               label="Anos Experiência"
+              name="anosExperiencia"
+              value={formData.anosExperiencia}
+              onChange={handleChange}
               variant="outlined"
               sx={{
                 flex: 1,
@@ -210,6 +257,16 @@ export default function CadastroFuncionario() {
           >
             <Button
               variant="outlined"
+              onClick={() =>
+                setFormData({
+                  nome: "",
+                  cpf: "",
+                  cargo: "",
+                  dataNascimento: "",
+                  especialidade: "",
+                  anosExperiencia: "",
+                })
+              }
               sx={{
                 borderColor: "#08005B",
                 color: "#08005B",
@@ -226,6 +283,22 @@ export default function CadastroFuncionario() {
               Limpar
             </Button>
 
+            <Button variant="contained" onClick={handleSubmit}>
+              Enviar
+            </Button>
+          </Box>
+        </Box>
+
+        <div
+          style={{
+            position: "absolute",
+            bottom: "16px",
+            right: "16px",
+            display: "flex",
+            gap: "24px", 
+          }}
+        >
+          <Link href="/funcionario" passHref>
             <Button
               variant="contained"
               sx={{
@@ -233,56 +306,47 @@ export default function CadastroFuncionario() {
                 color: "#FFF",
                 padding: "12px 24px",
                 fontSize: "16px",
-                width: "150px",
-                height: "50px",
                 "&:hover": {
                   backgroundColor: "#08005B",
                 },
               }}
             >
-              Enviar
+              Menu
             </Button>
-          </Box>
-        </Box>
-
-        <Link href="/funcionario" passHref>
-          <Button
-            variant="contained"
-            sx={{
-              position: "absolute",
-              bottom: "16px",
-              right: "16px",
-              backgroundColor: "#08005B",
-              color: "#FFF",
-              padding: "12px 24px",
-              fontSize: "16px",
-              "&:hover": {
-                backgroundColor: "#08005B",
-              },
-            }}
-          >
-            Menu
-          </Button>
-        </Link>
-        <Link href="/funcionario/tabela" passHref>
-          <Button
-            variant="contained"
-            sx={{
-              position: "absolute",
-              bottom: "16px",
-              right: "150px",
-              backgroundColor: "#08005B",
-              color: "#FFF",
-              padding: "12px 24px",
-              fontSize: "16px",
-              "&:hover": {
-                backgroundColor: "#08005B",
-              },
-            }}
-          >
-            Tabela
-          </Button>
           </Link>
+          <Link href="/funcionario/tabela" passHref>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#08005B",
+                color: "#FFF",
+                padding: "12px 24px",
+                fontSize: "16px",
+                "&:hover": {
+                  backgroundColor: "#08005B",
+                },
+              }}
+            >
+              Tabela
+            </Button>
+          </Link>
+          <Link href="/funcionario/editar" passHref>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#08005B",
+                color: "#FFF",
+                padding: "12px 24px",
+                fontSize: "16px",
+                "&:hover": {
+                  backgroundColor: "#08005B",
+                },
+              }}
+            >
+              Editar
+            </Button>
+          </Link>
+        </div>
       </Box>
     </ThemeProvider>
   );

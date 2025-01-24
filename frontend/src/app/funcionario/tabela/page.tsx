@@ -1,9 +1,13 @@
-import React from "react";
+"use client"; // Adicione esta linha no início do arquivo
+
+import React, { useEffect, useState } from "react";
 import TabelaComponente from "../../../components/TabelaComponente";
 import Link from "next/link";
-import Button from "@mui/material/Button"; // Importação do Button
+import Button from "@mui/material/Button";
+import apiFuncionario from "../../../config/axiosFuncionario"; // Importa o Axios configurado
 
 const App: React.FC = () => {
+  const [funcionarios, setFuncionarios] = useState([]);
   const headers = [
     { label: "ID", key: "id" },
     { label: "Nome", key: "nome" },
@@ -13,48 +17,27 @@ const App: React.FC = () => {
     { label: "Anos de Experiência", key: "anosExperiencia" },
   ];
 
-  const data = [
-    {
-      id: 1,
-      nome: "José Silva",
-      cpf: "111.111.111-11",
-      cargo: "Mecânico",
-      especialidade: "Motor",
-      anosExperiencia: 10,
-    },
-    {
-      id: 2,
-      nome: "Ana Souza",
-      cpf: "222.222.222-22",
-      cargo: "Eletricista",
-      especialidade: "Sistemas Elétricos",
-      anosExperiencia: 8,
-    },
-    {
-      id: 3,
-      nome: "Pedro Santos",
-      cpf: "333.333.333-33",
-      cargo: "Mecânico",
-      especialidade: "Suspensão",
-      anosExperiencia: 12,
-    },
-    {
-      id: 4,
-      nome: "Maria Oliveira",
-      cpf: "444.444.444-44",
-      cargo: "Atendente",
-      especialidade: "Atendimento ao Cliente",
-      anosExperiencia: 6,
-    },
-    {
-      id: 5,
-      nome: "Carlos Lima",
-      cpf: "555.555.555-55",
-      cargo: "Gerente",
-      especialidade: "Gestão de Equipe",
-      anosExperiencia: 15,
-    },
-  ];
+  const handleDelete = async (id: number) => {
+    try {
+      await apiFuncionario.delete(`/api/funcionarios/${id}`);
+      setFuncionarios(funcionarios.filter((funcionario) => funcionario.id !== id));
+    } catch (error) {
+      console.error("Erro ao deletar funcionário:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await apiFuncionario.get("/api/funcionarios");
+        setFuncionarios(response.data); // Armazena os dados da API no estado
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div
@@ -73,45 +56,72 @@ const App: React.FC = () => {
         }}
       >
         <h1 style={{ color: "#08005B" }}>Gerenciamento de Funcionários</h1>
-        <TabelaComponente headers={headers} data={data} rowsPerPage={5} />
-        <Link href="/funcionario" passHref>
-          <Button
-            variant="contained"
-            sx={{
-              position: "absolute",
-              bottom: "16px",
-              right: "16px",
-              backgroundColor: "#08005B",
-              color: "#FFF",
-              padding: "12px 24px",
-              fontSize: "16px",
-              "&:hover": {
+        <TabelaComponente
+          headers={headers}
+          data={funcionarios}
+          rowsPerPage={5}
+          onDelete={handleDelete}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: "16px",
+            right: "16px",
+            display: "flex",
+            gap: "24px",
+          }}
+        >
+          <Link href="/funcionario" passHref>
+            <Button
+              variant="contained"
+              sx={{
                 backgroundColor: "#08005B",
-              },
-            }}
-          >
-            Menu
-          </Button>
-        </Link>
-        <Link href="/funcionario/cadastro" passHref>
-          <Button
-            variant="contained"
-            sx={{
-              position: "absolute",
-              bottom: "16px",
-              right: "150px",
-              backgroundColor: "#08005B",
-              color: "#FFF",
-              padding: "12px 24px",
-              fontSize: "16px",
-              "&:hover": {
-                backgroundColor: "#08005B",
-              },
-            }}
-          >
-            Cadastro
-          </Button>
+                color: "#FFF",
+                padding: "12px 24px",
+                fontSize: "16px",
+                "&:hover": {
+                  backgroundColor: "#08005B",
+                },
+              }}
+            >
+              Menu
+            </Button>
           </Link>
+
+          <Link href="/funcionario/cadastro" passHref>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#08005B",
+                color: "#FFF",
+                padding: "12px 24px",
+                fontSize: "16px",
+                "&:hover": {
+                  backgroundColor: "#08005B",
+                },
+              }}
+            >
+              Cadastro
+            </Button>
+          </Link>
+
+          <Link href="/funcionario/editar" passHref>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#08005B",
+                color: "#FFF",
+                padding: "12px 24px",
+                fontSize: "16px",
+                "&:hover": {
+                  backgroundColor: "#08005B",
+                },
+              }}
+            >
+              Editar
+            </Button>
+          </Link>
+        </div>
       </main>
     </div>
   );
