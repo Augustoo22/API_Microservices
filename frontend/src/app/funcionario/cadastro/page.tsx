@@ -36,7 +36,6 @@ export default function CadastroFuncionario() {
   const handleSubmit = async () => {
     try {
       const response = await axios.post("http://localhost:5050/api/funcionarios", formData); // URL do backend
-      alert("Funcionário cadastrado com sucesso!");
       setFormData({
         nome: "",
         cpf: "",
