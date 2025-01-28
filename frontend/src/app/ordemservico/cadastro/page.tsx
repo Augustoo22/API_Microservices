@@ -8,8 +8,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import apiFuncionarios from "../../../config/axiosFuncionario";
 import apiVeiculos from "../../../config/axiosConfigVeiculos";
 import apiOrdemServico from "../../../config/axiosConfigOrdemServico";
-import Link from 'next/link';
-
+import Link from "next/link";
 
 const theme = createTheme({
   palette: {
@@ -27,7 +26,7 @@ export default function CadastroOrdemServico() {
     status: "true",
     quantidadeFuncionario: 0,
     funcionariosSelecionados: [],
-    veiculoSelecionado: null, // Apenas um veículo selecionado
+    veiculoSelecionado: null,
   });
 
   const [funcionarios, setFuncionarios] = useState([]);
@@ -90,22 +89,38 @@ export default function CadastroOrdemServico() {
   // Envia o formulário
   const handleSubmit = async () => {
     try {
+      const statusFinal = formData.status === "true"; // 'true' ou 'false' vindo do formulário será convertido em booleano
+      const dataInicioFormatada = new Date(formData.dataInicio).toISOString();
+      const dataTerminoFormatada = new Date(formData.dataTermino).toISOString();
+
+      // Extraímos apenas os nomes dos funcionários selecionados
+      const funcionariosSelecionados = formData.funcionariosSelecionados
+        .map((id) => {
+          const funcionario = funcionarios.find((f) => f.id === id);
+          return funcionario ? funcionario.nome : null;
+        })
+        .filter(Boolean); // Remove valores nulos
+
+      // Extraímos apenas as placas dos veículos selecionados
+      const veiculosSelecionados = formData.veiculoSelecionado
+        ? [formData.veiculoSelecionado]
+        : [];
+
       const payload = {
         servico: formData.servico,
-        dataInicio: formData.dataInicio, // Envie no formato original, sem modificar
-        dataTermino: formData.dataTermino,
+        dataInicio: dataInicioFormatada,
+        dataTermino: dataTerminoFormatada,
         descricao: formData.descricao,
-        status: formData.status === "true", // Converta para booleano
+        status: statusFinal, // Usando o valor booleano
         quantidadeFuncionario: parseInt(formData.quantidadeFuncionario, 10),
-        funcionarios: formData.funcionariosSelecionados, // IDs dos funcionários
-        veiculo: formData.veiculoSelecionado, // ID do veículo
+        funcionarios: funcionariosSelecionados, // Array de nomes
+        veiculos: veiculosSelecionados, // Array de placas
       };
 
       console.log("Payload enviado:", payload);
 
       const response = await apiOrdemServico.post("/api/ordensServico", payload);
       console.log("Ordem de Serviço cadastrada com sucesso:", response.data);
-
       handleClear();
     } catch (error) {
       console.error("Erro ao cadastrar Ordem de Serviço:", error);
@@ -219,7 +234,7 @@ export default function CadastroOrdemServico() {
             variant="outlined"
             fullWidth
             value={formData.veiculoSelecionado || ""}
-            onChange={(e) => handleInputChange(e)}
+            onChange={handleInputChange}
             sx={muiStyles}
           >
             {veiculos.map((veiculo) => (
@@ -239,80 +254,95 @@ export default function CadastroOrdemServico() {
             </Button>
           </Box>
         </Box>
-                  <div
-            style={{
-              position: "absolute",
-              bottom: "16px",
-              right: "16px",
-              display: "flex",
-              gap: "24px", // Espaçamento uniforme entre os botões
-            }}
-          >
-            <Link href="/ordemservico" passHref>
-              <Button
-                variant="contained"
-                sx={{
+        <div
+          style={{
+            position: "absolute",
+            bottom: "16px",
+            right: "16px",
+            display: "flex",
+            gap: "24px",
+          }}
+        >
+          <Link href="/ordemservico" passHref>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#08005B",
+                color: "#FFF",
+                padding: "12px 24px",
+                fontSize: "16px",
+                "&:hover": {
                   backgroundColor: "#08005B",
-                  color: "#FFF",
-                  padding: "12px 24px",
-                  fontSize: "16px",
-                  "&:hover": {
-                    backgroundColor: "#08005B",
-                  },
-                }}
-              >
-                Menu
-              </Button>
-            </Link>
-            <Link href="/ordemservico/tabela" passHref>
-              <Button
-                variant="contained"
-                sx={{
+                },
+              }}
+            >
+              Menu
+            </Button>
+          </Link>
+          <Link href="/ordemservico/tabela" passHref>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#08005B",
+                color: "#FFF",
+                padding: "12px 24px",
+                fontSize: "16px",
+                "&:hover": {
                   backgroundColor: "#08005B",
-                  color: "#FFF",
-                  padding: "12px 24px",
-                  fontSize: "16px",
-                  "&:hover": {
-                    backgroundColor: "#08005B",
-                  },
-                }}
-              >
-                Tabela
-              </Button>
-            </Link>
-            <Link href="/ordemservico/editar" passHref>
-              <Button
-                variant="contained"
-                sx={{
+                },
+              }}
+            >
+              Tabela
+            </Button>
+          </Link>
+          <Link href="/ordemservico/editar" passHref>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#08005B",
+                color: "#FFF",
+                padding: "12px 24px",
+                fontSize: "16px",
+                "&:hover": {
                   backgroundColor: "#08005B",
-                  color: "#FFF",
-                  padding: "12px 24px",
-                  fontSize: "16px",
-                  "&:hover": {
-                    backgroundColor: "#08005B",
-                  },
-                }}
-              >
-                Editar
-              </Button>
-            </Link>
-          </div>
+                },
+              }}
+            >
+              Editar
+            </Button>
+          </Link>
+        </div>
       </Box>
     </ThemeProvider>
   );
 }
 
 const muiStyles = {
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": { borderColor: "#08005B" },
-    "&:hover fieldset": { borderColor: "#08005B" },
-    "&.Mui-focused fieldset": { borderColor: "#08005B" },
+  "& .MuiInputBase-root": {
+    fontSize: "16px",
+    borderRadius: "8px",
+    marginBottom: "16px",
   },
-  "& .MuiInputLabel-root": { color: "#08005B" },
-  "& .MuiInputLabel-root.Mui-focused": { color: "#08005B" },
 };
 
 const buttonStyles = {
-  outlined: { borderColor: "#08005B", color: "#08005B", padding: "12px 24px", fontSize: "16px" },
-  contained: { backgroundColor: "#08005B", color: "#FFF", padding: "12px 24px", fontSize: "16px" },
+  outlined: {
+    color: "#08005B",
+    borderColor: "#08005B",
+    fontSize: "16px",
+    borderRadius: "8px",
+    fontWeight: 600,
+    padding: "12px 24px",
+  },
+  contained: {
+    backgroundColor: "#08005B",
+    color: "#FFF",
+    fontSize: "16px",
+    borderRadius: "8px",
+    fontWeight: 600,
+    padding: "12px 24px",
+    "&:hover": {
+      backgroundColor: "#08005B",
+    },
+  },
 };
