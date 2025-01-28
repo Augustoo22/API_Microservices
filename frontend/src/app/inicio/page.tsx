@@ -1,8 +1,62 @@
 "use client";
-import React from "react";
-import TabelaSimples from "../../components/TabelaSimples"; // Atualize para importar o novo componente
+import React, { useEffect, useState } from "react";
+import TabelaSimples from "../../components/TabelaSimples";
+import apiOrdemServico from "../../config/axiosConfigOrdemServico";
+import apiFuncionarios from "../../config/axiosFuncionario";
+import apiVeiculos from "../../config/axiosConfigVeiculos";
+import api from "../../config/axiosConfigCliente";
 
 const DashboardLayout: React.FC = () => {
+  const [cards, setCards] = useState([
+    { label: "O.S", value: 0, icon: "Notepad.png" },
+    { label: "Clientes", value: 0, icon: "customerlistsfill.png" },
+    { label: "Veículos", value: 0, icon: "Car.png" },
+    { label: "Funcionários", value: 0, icon: "PeopleTeam.png" },
+  ]);
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        // Realiza as chamadas para as APIs
+        const [osResponse, clientesResponse, veiculosResponse, funcionariosResponse] = await Promise.all([
+          apiOrdemServico.get("/api/ordensServico"),
+          api.get("/api/clientes"),
+          apiVeiculos.get("/api/veiculos"),
+          apiFuncionarios.get("/api/funcionarios"),
+        ]);
+
+        // Logs de depuração para verificar as respostas
+        console.log("O.S Response:", osResponse.data);
+        console.log("Clientes Response:", clientesResponse.data);
+        console.log("Veículos Response:", veiculosResponse.data);
+        console.log("Funcionários Response:", funcionariosResponse.data);
+
+        // Verificar se os dados estão retornando como esperado
+        if (
+          !Array.isArray(osResponse.data) ||
+          !Array.isArray(clientesResponse.data) ||
+          !Array.isArray(veiculosResponse.data) ||
+          !Array.isArray(funcionariosResponse.data)
+        ) {
+          throw new Error("Erro ao obter dados da API.");
+        }
+
+        // Atualiza os valores nos cards com base no comprimento dos arrays
+        setCards([
+          { label: "O.S", value: osResponse.data.length, icon: "Notepad.png" },
+          { label: "Clientes", value: clientesResponse.data.length, icon: "customerlistsfill.png" },
+          { label: "Veículos", value: veiculosResponse.data.length, icon: "Car.png" },
+          { label: "Funcionários", value: funcionariosResponse.data.length, icon: "PeopleTeam.png" },
+        ]);
+      } catch (error) {
+        console.error("Erro ao buscar os dados dos cards:", error);
+      }
+    };
+
+    fetchCounts();
+  }, []);
+
+  // Headers e dados simulados para as tabelas
   const headers1 = [
     { label: "Veículos", key: "proprietario" },
     { label: "Tipo", key: "tipo" },
@@ -10,36 +64,11 @@ const DashboardLayout: React.FC = () => {
   ];
 
   const data1 = [
-    {
-      id: 1,
-      proprietario: "Toyota Corolla",
-      tipo: "carro",
-      status: "Manutenção",
-    },
-    {
-      id: 2,
-      proprietario: "Honda Civic",
-      tipo: "carro",
-      status: "Espera",
-    },
-    {
-      id: 3,
-      proprietario: "Yamaha MT-07",
-      tipo: "moto",
-      status: "Liberado",
-    },
-    {
-      id: 4,
-      proprietario: "Yamaha XT-660",
-      tipo: "moto",
-      status: "Liberado",
-    },
-    {
-      id: 5,
-      proprietario: "Yamaha XJ-6",
-      tipo: "moto",
-      status: "Espera",
-    },
+    { id: 1, proprietario: "Toyota Corolla", tipo: "carro", status: "Manutenção" },
+    { id: 2, proprietario: "Honda Civic", tipo: "carro", status: "Espera" },
+    { id: 3, proprietario: "Yamaha MT-07", tipo: "moto", status: "Liberado" },
+    { id: 4, proprietario: "Yamaha XT-660", tipo: "moto", status: "Liberado" },
+    { id: 5, proprietario: "Yamaha XJ-6", tipo: "moto", status: "Espera" },
   ];
 
   const headers2 = [
@@ -53,29 +82,6 @@ const DashboardLayout: React.FC = () => {
     { clientes: "Beatriz Oliveira", quantidadeVeiculos: 2 },
     { clientes: "Carlos Silva", quantidadeVeiculos: 1 },
     { clientes: "Maria Costa", quantidadeVeiculos: 3 },
-  ];
-
-  const cards = [
-    {
-      label: "O.S",
-      value: 999,
-      icon: "Notepad.png",
-    },
-    {
-      label: "Clientes",
-      value: 999,
-      icon: "customerlistsfill.png",
-    },
-    {
-      label: "Veículos",
-      value: 999,
-      icon: "Car.png",
-    },
-    {
-      label: "Funcionários",
-      value: 999,
-      icon: "PeopleTeam.png",
-    },
   ];
 
   const osSummary = [
@@ -155,8 +161,8 @@ const DashboardLayout: React.FC = () => {
       {/* Tables Section */}
       <div
         style={{
-          display: "flex", 
-          justifyContent: "center", 
+          display: "flex",
+          justifyContent: "center",
           gap: "150px",
         }}
       >
