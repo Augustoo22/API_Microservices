@@ -14,6 +14,9 @@ const DashboardLayout: React.FC = () => {
     { label: "Funcionários", value: 0, icon: "PeopleTeam.png" },
   ]);
 
+  const [veiculos, setVeiculos] = useState([]);
+  const [clientes, setClientes] = useState([]);
+
   useEffect(() => {
     const fetchCounts = async () => {
       try {
@@ -25,22 +28,6 @@ const DashboardLayout: React.FC = () => {
           apiFuncionarios.get("/api/funcionarios"),
         ]);
 
-        // Logs de depuração para verificar as respostas
-        console.log("O.S Response:", osResponse.data);
-        console.log("Clientes Response:", clientesResponse.data);
-        console.log("Veículos Response:", veiculosResponse.data);
-        console.log("Funcionários Response:", funcionariosResponse.data);
-
-        // Verificar se os dados estão retornando como esperado
-        if (
-          !Array.isArray(osResponse.data) ||
-          !Array.isArray(clientesResponse.data) ||
-          !Array.isArray(veiculosResponse.data) ||
-          !Array.isArray(funcionariosResponse.data)
-        ) {
-          throw new Error("Erro ao obter dados da API.");
-        }
-
         // Atualiza os valores nos cards com base no comprimento dos arrays
         setCards([
           { label: "O.S", value: osResponse.data.length, icon: "Notepad.png" },
@@ -48,41 +35,41 @@ const DashboardLayout: React.FC = () => {
           { label: "Veículos", value: veiculosResponse.data.length, icon: "Car.png" },
           { label: "Funcionários", value: funcionariosResponse.data.length, icon: "PeopleTeam.png" },
         ]);
+
+        setVeiculos(veiculosResponse.data);
+        setClientes(clientesResponse.data);
       } catch (error) {
-        console.error("Erro ao buscar os dados dos cards:", error);
+        console.error("Erro ao buscar os dados:", error);
       }
     };
 
     fetchCounts();
   }, []);
 
-  // Headers e dados simulados para as tabelas
+  // Headers das tabelas
   const headers1 = [
-    { label: "Veículos", key: "proprietario" },
+    { label: "Veículos", key: "nome" },
     { label: "Tipo", key: "tipo" },
     { label: "Status", key: "status" },
   ];
 
-  const data1 = [
-    { id: 1, proprietario: "Toyota Corolla", tipo: "carro", status: "Manutenção" },
-    { id: 2, proprietario: "Honda Civic", tipo: "carro", status: "Espera" },
-    { id: 3, proprietario: "Yamaha MT-07", tipo: "moto", status: "Liberado" },
-    { id: 4, proprietario: "Yamaha XT-660", tipo: "moto", status: "Liberado" },
-    { id: 5, proprietario: "Yamaha XJ-6", tipo: "moto", status: "Espera" },
-  ];
-
   const headers2 = [
     { label: "Clientes", key: "clientes" },
-    { label: "Quantidade Veiculos", key: "quantidadeVeiculos" },
+    { label: "Quantidade Veículos", key: "quantidadeVeiculos" },
   ];
 
-  const data2 = [
-    { clientes: "Ana Souza", quantidadeVeiculos: 5 },
-    { clientes: "João Martins", quantidadeVeiculos: 1 },
-    { clientes: "Beatriz Oliveira", quantidadeVeiculos: 2 },
-    { clientes: "Carlos Silva", quantidadeVeiculos: 1 },
-    { clientes: "Maria Costa", quantidadeVeiculos: 3 },
-  ];
+  // Dados das tabelas usando as informações das APIs
+  const tableVeiculosData = veiculos.map((item: any) => ({
+    id: item.id,
+    nome: item.nome || item.modelo, // Ajuste conforme a estrutura da API
+    tipo: item.tipo,
+    status: item.status,
+  }));
+
+  const tableClientesData = clientes.map((item: any) => ({
+    clientes: item.nome,
+    quantidadeVeiculos: item.veiculos?.length || 0, // Supondo que a API retorna uma lista de veículos
+  }));
 
   const osSummary = [
     { label: "O.S Atrasadas", value: 3, color: "#F44336" },
@@ -138,7 +125,7 @@ const DashboardLayout: React.FC = () => {
             <div style={{ textAlign: "left" }}>
               <div
                 style={{
-                  fontSize: "22px", // Fonte do título aumentada
+                  fontSize: "22px",
                   fontWeight: "bold",
                 }}
               >
@@ -146,9 +133,9 @@ const DashboardLayout: React.FC = () => {
               </div>
               <div
                 style={{
-                  fontSize: "64px", // Fonte do número aumentada
+                  fontSize: "64px",
                   fontWeight: "bold",
-                  lineHeight: "1", // Para evitar excesso de espaço vertical
+                  lineHeight: "1",
                 }}
               >
                 {card.value}
@@ -166,8 +153,8 @@ const DashboardLayout: React.FC = () => {
           gap: "150px",
         }}
       >
-        <TabelaSimples headers={headers1} data={data1} rowsPerPage={5} />
-        <TabelaSimples headers={headers2} data={data2} rowsPerPage={5} />
+        <TabelaSimples headers={headers1} data={tableVeiculosData} rowsPerPage={5} />
+        <TabelaSimples headers={headers2} data={tableClientesData} rowsPerPage={5} />
       </div>
 
       {/* O.S Summary Section */}
