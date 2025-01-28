@@ -7,6 +7,8 @@ import MenuItem from "@mui/material/MenuItem";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Link from "next/link";
 import apiOrdemServico from "../../../config/axiosConfigOrdemServico";
+import apiFuncionarios from "../../../config/axiosFuncionario";
+import apiVeiculos from "../../../config/axiosConfigVeiculos";
 
 const theme = createTheme({
   palette: {
@@ -17,22 +19,42 @@ const theme = createTheme({
 
 export default function EditarOrdemServico() {
   const [id, setId] = useState("");
-  const [quantidadeFuncionarios, setQuantidadeFuncionarios] = useState(1);
+  const [quantidadeFuncionario, setQuantidadeFuncionario] = useState(1);
   const [funcionariosSelecionados, setFuncionariosSelecionados] = useState({});
   const [formData, setFormData] = useState({
-    veiculo: "",
     servico: "",
     dataInicio: "",
     dataTermino: "",
-    descricaoServico: "",
-    statusOS: "",
+    descricao: "",
+    status: true, // Alterado para booleano
+    veiculos: "",
   });
+  const [funcionariosSet, setFuncionariosSet] = useState([]);
+  const [veiculos, setVeiculos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  useEffect(() => {
+    const fetchFuncionarios = async () => {
+      try {
+        const response = await apiFuncionarios.get("/api/funcionarios");
+        setFuncionariosSet(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar funcionários:", error);
+      }
+    };
+
+    const fetchVeiculos = async () => {
+      try {
+        const response = await apiVeiculos.get("/api/veiculos");
+        setVeiculos(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar veículos:", error);
+      }
+    };
+
+    fetchFuncionarios();
+    fetchVeiculos();
+  }, []);
 
   const handleFuncionarioChange = (index, value) => {
     setFuncionariosSelecionados((prevState) => ({
@@ -41,18 +63,22 @@ export default function EditarOrdemServico() {
     }));
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleClear = () => {
-    setId("");
     setFormData({
-      veiculo: "",
       servico: "",
       dataInicio: "",
       dataTermino: "",
-      descricaoServico: "",
-      statusOS: "",
+      descricao: "",
+      status: true, // Alterado para booleano
+      veiculos: "",
     });
     setFuncionariosSelecionados({});
-    setQuantidadeFuncionarios(1);
+    setQuantidadeFuncionario(1);
   };
 
   const handleFetchOrdemServico = async () => {
@@ -63,54 +89,56 @@ export default function EditarOrdemServico() {
 
     try {
       setIsLoading(true);
-      const response = await apiOrdemServico.get(`/api/ordemservico/${id}`);
+      const response = await apiOrdemServico.get(`/api/ordensServico/${id}`);
       const ordemServico = response.data;
 
+      // Preencher os dados do formulário
       setFormData({
-        veiculo: ordemServico.veiculo,
         servico: ordemServico.servico,
         dataInicio: ordemServico.dataInicio,
         dataTermino: ordemServico.dataTermino,
-        descricaoServico: ordemServico.descricaoServico,
-        statusOS: ordemServico.statusOS,
+        descricao: ordemServico.descricao,
+        status: ordemServico.status, // Esperando como booleano
+        veiculos: ordemServico.veiculos || "", // ID do veículo
       });
 
+      // Preencher os funcionários selecionados
       setFuncionariosSelecionados(
         ordemServico.funcionarios.reduce((acc, funcionario, index) => {
-          acc[index] = funcionario;
+          acc[index] = funcionario.id;
           return acc;
         }, {})
       );
-      setQuantidadeFuncionarios(ordemServico.funcionarios.length || 1);
+
+      // Atualizar a quantidade de funcionários
+      setQuantidadeFuncionario(ordemServico.funcionarios.length || 1);
       setIsLoading(false);
     } catch (error) {
-      console.error("Erro ao buscar Ordem de Serviço:", error);
-      alert("Erro ao buscar Ordem de Serviço. Verifique o ID e tente novamente.");
+      console.error("Erro ao buscar ordem de serviço:", error);
+      alert("Erro ao buscar ordem de serviço. Verifique o ID e tente novamente.");
       setIsLoading(false);
     }
   };
 
   const handleSubmit = async () => {
     if (!id) {
-      alert("Por favor, insira um ID válido para editar a Ordem de Serviço.");
+      alert("Por favor, insira um ID válido para editar a ordem de serviço.");
       return;
     }
 
     const payload = {
       ...formData,
+      status: formData.status === "true", // Convertendo para booleano
       funcionarios: Object.values(funcionariosSelecionados),
-      quantidadeFuncionarios: quantidadeFuncionarios,
+      quantidadeFuncionario: quantidadeFuncionario,
     };
 
-    console.log("Payload sendo enviado:", payload);
-
     try {
-      const response = await apiOrdemServico.put(`/api/ordemservico/${id}`, payload);
-      console.log(response.data);
-      alert("Ordem de Serviço editada com sucesso!");
+      await apiOrdemServico.put(`/api/ordensServico/${id}`, payload);
+      alert("Ordem de Serviço atualizada com sucesso.");
     } catch (error) {
-      console.error("Erro ao editar Ordem de Serviço:", error);
-      alert("Erro ao editar Ordem de Serviço. Tente novamente.");
+      console.error("Erro ao editar ordem de serviço:", error);
+      alert("Erro ao editar ordem de serviço. Tente novamente.");
     }
   };
 
@@ -128,7 +156,7 @@ export default function EditarOrdemServico() {
             display: "flex",
             flexDirection: "column",
             gap: "16px",
-            width: "520px",
+            width: "600px",
             marginLeft: "25px",
           }}
         >
@@ -154,16 +182,6 @@ export default function EditarOrdemServico() {
           >
             {isLoading ? "Buscando..." : "Buscar"}
           </Button>
-
-          <TextField
-            label="Veículo"
-            name="veiculo"
-            variant="outlined"
-            fullWidth
-            value={formData.veiculo}
-            onChange={handleInputChange}
-            sx={muiStyles}
-          />
 
           <TextField
             label="Serviço"
@@ -200,52 +218,86 @@ export default function EditarOrdemServico() {
           />
 
           <TextField
-            label="Descrição Serviço"
-            name="descricaoServico"
+            label="Descrição"
+            name="descricao"
             variant="outlined"
             fullWidth
-            value={formData.descricaoServico}
+            value={formData.descricao}
             onChange={handleInputChange}
             sx={muiStyles}
           />
 
           <TextField
-            label="Status O.S"
-            name="statusOS"
-            variant="outlined"
-            fullWidth
-            value={formData.statusOS}
-            onChange={handleInputChange}
-            sx={muiStyles}
-          />
-
-          <TextField
-            label="Quantidade Funcionários"
+            label="Status"
+            name="status"
             select
             variant="outlined"
             fullWidth
-            value={quantidadeFuncionarios}
-            onChange={(e) => setQuantidadeFuncionarios(parseInt(e.target.value, 10))}
+            value={formData.status ? "true" : "false"} // Convertendo para string
+            onChange={handleInputChange}
             sx={muiStyles}
           >
-            {[1, 2, 3, 4, 5].map((value) => (
-              <MenuItem key={value} value={value}>
-                {value}
-              </MenuItem>
-            ))}
+            <MenuItem value="true">Aberta</MenuItem>
+            <MenuItem value="false">Fechada</MenuItem>
           </TextField>
 
-          {Array.from({ length: quantidadeFuncionarios }).map((_, index) => (
+          <TextField
+            label="Quantidade de Funcionários"
+            name="quantidadeFuncionario"
+            type="number"
+            variant="outlined"
+            fullWidth
+            value={quantidadeFuncionario}
+            onChange={(e) => {
+              const value = parseInt(e.target.value, 10) || 1;
+              setQuantidadeFuncionario(value);
+            }}
+            sx={muiStyles}
+          />
+
+          {Array.from({ length: quantidadeFuncionario }).map((_, index) => (
             <TextField
               key={index}
               label={`Funcionário ${index + 1}`}
+              select
               variant="outlined"
               fullWidth
               value={funcionariosSelecionados[index] || ""}
               onChange={(e) => handleFuncionarioChange(index, e.target.value)}
               sx={muiStyles}
-            />
+            >
+              {funcionariosSet.length > 0 ? (
+                funcionariosSet.map((funcionario) => (
+                  <MenuItem key={funcionario.id} value={funcionario.id}>
+                    {`${funcionario.nome} - ${funcionario.cpf}`}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem disabled>Nenhum funcionário disponível</MenuItem>
+              )}
+            </TextField>
           ))}
+
+          <TextField
+            label="Veículo"
+            name="veiculos"
+            select
+            variant="outlined"
+            fullWidth
+            value={formData.veiculos || ""}
+            onChange={handleInputChange}
+            sx={muiStyles}
+          >
+            {veiculos.length > 0 ? (
+              veiculos.map((veiculo) => (
+                <MenuItem key={veiculo.id} value={veiculo.id}>
+                  {`${veiculo.nome} - ${veiculo.placa}`}
+                </MenuItem>
+              ))
+            ) : (
+              <MenuItem disabled>Nenhum veículo disponível</MenuItem>
+            )}
+          </TextField>
 
           <Box
             sx={{
@@ -271,33 +323,20 @@ export default function EditarOrdemServico() {
               Salvar
             </Button>
           </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "16px",
+              marginTop: "16px",
+            }}
+          >
+            <Link href="/ordensServico" style={{ color: "#08005B" }}>
+              Voltar
+            </Link>
+          </Box>
         </Box>
-        <div
-          style={{
-            position: "absolute",
-            bottom: "16px",
-            right: "16px",
-            display: "flex",
-            flexDirection: "row",
-            gap: "16px",
-          }}
-        >
-          <Link href="/ordemservico" passHref>
-            <Button variant="contained" sx={buttonStyles.contained}>
-              Menu
-            </Button>
-          </Link>
-          <Link href="/ordemservico/tabela" passHref>
-            <Button variant="contained" sx={buttonStyles.contained}>
-              Tabela
-            </Button>
-          </Link>
-          <Link href="/ordemservico/cadastro" passHref>
-            <Button variant="contained" sx={buttonStyles.contained}>
-              Cadastro
-            </Button>
-          </Link>
-        </div>
       </Box>
     </ThemeProvider>
   );
@@ -305,25 +344,21 @@ export default function EditarOrdemServico() {
 
 const muiStyles = {
   "& .MuiOutlinedInput-root": {
-    "& fieldset": { borderColor: "#08005B" },
-    "&:hover fieldset": { borderColor: "#08005B" },
-    "&.Mui-focused fieldset": { borderColor: "#08005B" },
+    backgroundColor: "white",
+    borderRadius: "4px",
   },
-  "& .MuiInputLabel-root": { color: "#08005B" },
-  "& .MuiInputLabel-root.Mui-focused": { color: "#08005B" },
 };
 
 const buttonStyles = {
   outlined: {
-    borderColor: "#08005B",
     color: "#08005B",
-    padding: "12px 24px",
-    fontSize: "16px",
+    borderColor: "#08005B",
   },
   contained: {
     backgroundColor: "#08005B",
-    color: "#FFF",
-    padding: "12px 24px",
-    fontSize: "16px",
+    color: "white",
+    "&:hover": {
+      backgroundColor: "#08005B",
+    },
   },
 };
