@@ -26,7 +26,7 @@ export default function EditarOrdemServico() {
     dataInicio: "",
     dataTermino: "",
     descricao: "",
-    status: true, // Alterado para booleano
+    status: true,
     veiculos: "",
   });
   const [funcionariosSet, setFuncionariosSet] = useState([]);
@@ -74,7 +74,7 @@ export default function EditarOrdemServico() {
       dataInicio: "",
       dataTermino: "",
       descricao: "",
-      status: true, // Alterado para booleano
+      status: true,
       veiculos: "",
     });
     setFuncionariosSelecionados({});
@@ -92,17 +92,15 @@ export default function EditarOrdemServico() {
       const response = await apiOrdemServico.get(`/api/ordensServico/${id}`);
       const ordemServico = response.data;
 
-      // Preencher os dados do formulário
       setFormData({
         servico: ordemServico.servico,
         dataInicio: ordemServico.dataInicio,
         dataTermino: ordemServico.dataTermino,
         descricao: ordemServico.descricao,
-        status: ordemServico.status, // Esperando como booleano
-        veiculos: ordemServico.veiculos || "", // ID do veículo
+        status: ordemServico.status,
+        veiculos: ordemServico.veiculos || "",
       });
 
-      // Preencher os funcionários selecionados
       setFuncionariosSelecionados(
         ordemServico.funcionarios.reduce((acc, funcionario, index) => {
           acc[index] = funcionario.id;
@@ -110,7 +108,6 @@ export default function EditarOrdemServico() {
         }, {})
       );
 
-      // Atualizar a quantidade de funcionários
       setQuantidadeFuncionario(ordemServico.funcionarios.length || 1);
       setIsLoading(false);
     } catch (error) {
@@ -128,7 +125,7 @@ export default function EditarOrdemServico() {
 
     const payload = {
       ...formData,
-      status: formData.status === "true", // Convertendo para booleano
+      status: formData.status === "true",
       funcionarios: Object.values(funcionariosSelecionados),
       quantidadeFuncionario: quantidadeFuncionario,
     };
@@ -156,7 +153,7 @@ export default function EditarOrdemServico() {
             display: "flex",
             flexDirection: "column",
             gap: "16px",
-            width: "600px",
+            width: "520px",
             marginLeft: "25px",
           }}
         >
@@ -233,7 +230,7 @@ export default function EditarOrdemServico() {
             select
             variant="outlined"
             fullWidth
-            value={formData.status ? "true" : "false"} // Convertendo para string
+            value={formData.status ? "true" : "false"}
             onChange={handleInputChange}
             sx={muiStyles}
           >
@@ -323,19 +320,76 @@ export default function EditarOrdemServico() {
               Salvar
             </Button>
           </Box>
+        </Box>
 
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "16px",
-              marginTop: "16px",
-            }}
-          >
-            <Link href="/ordensServico" style={{ color: "#08005B" }}>
-              Voltar
-            </Link>
-          </Box>
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: "16px",
+            right: "16px",
+            display: "flex",
+            gap: "16px",
+          }}
+        >
+          <div
+          style={{
+            position: "absolute",
+            bottom: "16px",
+            right: "16px",
+            display: "flex",
+            flexDirection: "row",
+            gap: "16px",
+          }}
+        >
+    <Link href="/ordemservico" passHref>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: "#08005B",
+          color: "#FFF",
+          padding: "12px 24px",
+          fontSize: "16px",
+          "&:hover": {
+            backgroundColor: "#08005B",
+          },
+        }}
+      >
+        Menu
+      </Button>
+    </Link>
+    <Link href="/ordemservico/tabela" passHref>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: "#08005B",
+          color: "#FFF",
+          padding: "12px 24px",
+          fontSize: "16px",
+          "&:hover": {
+            backgroundColor: "#08005B",
+          },
+        }}
+      >
+        Tabela
+      </Button>
+    </Link>
+    <Link href="/ordemservico/cadastro" passHref>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: "#08005B",
+          color: "#FFF",
+          padding: "12px 24px",
+          fontSize: "16px",
+          "&:hover": {
+            backgroundColor: "#08005B",
+          },
+        }}
+      >
+        Cadastro
+      </Button>
+    </Link>
+  </div>
         </Box>
       </Box>
     </ThemeProvider>
@@ -344,19 +398,36 @@ export default function EditarOrdemServico() {
 
 const muiStyles = {
   "& .MuiOutlinedInput-root": {
-    backgroundColor: "white",
-    borderRadius: "4px",
+    "& fieldset": {
+      borderColor: "#08005B",
+    },
+    "&:hover fieldset": {
+      borderColor: "#08005B",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#08005B",
+    },
+  },
+  "& .MuiInputLabel-root": {
+    color: "#08005B",
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: "#08005B",
   },
 };
 
 const buttonStyles = {
   outlined: {
-    color: "#08005B",
     borderColor: "#08005B",
+    color: "#08005B",
+    padding: "12px 24px",
+    fontSize: "16px",
   },
   contained: {
     backgroundColor: "#08005B",
-    color: "white",
+    color: "#FFF",
+    padding: "12px 24px",
+    fontSize: "16px",
     "&:hover": {
       backgroundColor: "#08005B",
     },

@@ -129,8 +129,22 @@ export default function CadastroOrdemServico() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: "flex", height: "100vh", backgroundColor: "#E9E9E9" }}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: "16px", width: "600px", marginLeft: "25px" }}>
+      <Box
+        sx={{
+          display: "flex",
+          height: "100vh",
+          backgroundColor: "#E9E9E9",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "16px",
+            width: "520px",
+            marginLeft: "25px",
+          }}
+        >
           <h1 style={{ textAlign: "left", color: "#08005B" }}>Cadastro de Ordem de Serviço</h1>
 
           {/* Serviço */}
@@ -245,11 +259,26 @@ export default function CadastroOrdemServico() {
           </TextField>
 
           {/* Botões */}
-          <Box sx={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "16px" }}>
-            <Button variant="outlined" sx={buttonStyles.outlined} onClick={handleClear}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "16px",
+              marginTop: "16px",
+            }}
+          >
+            <Button
+              variant="outlined"
+              sx={buttonStyles.outlined}
+              onClick={handleClear}
+            >
               Limpar
             </Button>
-            <Button variant="contained" sx={buttonStyles.contained} onClick={handleSubmit}>
+            <Button
+              variant="contained"
+              sx={buttonStyles.contained}
+              onClick={handleSubmit}
+            >
               Enviar
             </Button>
           </Box>
@@ -317,32 +346,38 @@ export default function CadastroOrdemServico() {
   );
 }
 
+// Estilos reutilizáveis
 const muiStyles = {
-  "& .MuiInputBase-root": {
-    fontSize: "16px",
-    borderRadius: "8px",
-    marginBottom: "16px",
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#08005B",
+    },
+    "&:hover fieldset": {
+      borderColor: "#08005B",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#08005B",
+    },
+  },
+  "& .MuiInputLabel-root": {
+    color: "#08005B",
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: "#08005B",
   },
 };
 
 const buttonStyles = {
   outlined: {
-    color: "#08005B",
     borderColor: "#08005B",
-    fontSize: "16px",
-    borderRadius: "8px",
-    fontWeight: 600,
+    color: "#08005B",
     padding: "12px 24px",
+    fontSize: "16px",
   },
   contained: {
     backgroundColor: "#08005B",
     color: "#FFF",
-    fontSize: "16px",
-    borderRadius: "8px",
-    fontWeight: 600,
     padding: "12px 24px",
-    "&:hover": {
-      backgroundColor: "#08005B",
-    },
+    fontSize: "16px",
   },
 };
