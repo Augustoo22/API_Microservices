@@ -132,7 +132,8 @@ export default function EditarOrdemServico() {
 
     try {
       await apiOrdemServico.put(`/api/ordensServico/${id}`, payload);
-      alert("Ordem de Serviço atualizada com sucesso.");
+      handleClear();
+
     } catch (error) {
       console.error("Erro ao editar ordem de serviço:", error);
       alert("Erro ao editar ordem de serviço. Tente novamente.");
@@ -332,64 +333,64 @@ export default function EditarOrdemServico() {
           }}
         >
           <div
-          style={{
-            position: "absolute",
-            bottom: "16px",
-            right: "16px",
-            display: "flex",
-            flexDirection: "row",
-            gap: "16px",
-          }}
-        >
-    <Link href="/ordemservico" passHref>
-      <Button
-        variant="contained"
-        sx={{
-          backgroundColor: "#08005B",
-          color: "#FFF",
-          padding: "12px 24px",
-          fontSize: "16px",
-          "&:hover": {
-            backgroundColor: "#08005B",
-          },
-        }}
-      >
-        Menu
-      </Button>
-    </Link>
-    <Link href="/ordemservico/tabela" passHref>
-      <Button
-        variant="contained"
-        sx={{
-          backgroundColor: "#08005B",
-          color: "#FFF",
-          padding: "12px 24px",
-          fontSize: "16px",
-          "&:hover": {
-            backgroundColor: "#08005B",
-          },
-        }}
-      >
-        Tabela
-      </Button>
-    </Link>
-    <Link href="/ordemservico/cadastro" passHref>
-      <Button
-        variant="contained"
-        sx={{
-          backgroundColor: "#08005B",
-          color: "#FFF",
-          padding: "12px 24px",
-          fontSize: "16px",
-          "&:hover": {
-            backgroundColor: "#08005B",
-          },
-        }}
-      >
-        Cadastro
-      </Button>
-    </Link>
-  </div>
+            style={{
+              position: "absolute",
+              bottom: "16px",
+              right: "16px",
+              display: "flex",
+              flexDirection: "row",
+              gap: "16px",
+            }}
+          >
+            <Link href="/ordemservico" passHref>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#08005B",
+                  color: "#FFF",
+                  padding: "12px 24px",
+                  fontSize: "16px",
+                  "&:hover": {
+                    backgroundColor: "#08005B",
+                  },
+                }}
+              >
+                Menu
+              </Button>
+            </Link>
+            <Link href="/ordemservico/tabela" passHref>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#08005B",
+                  color: "#FFF",
+                  padding: "12px 24px",
+                  fontSize: "16px",
+                  "&:hover": {
+                    backgroundColor: "#08005B",
+                  },
+                }}
+              >
+                Tabela
+              </Button>
+            </Link>
+            <Link href="/ordemservico/cadastro" passHref>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#08005B",
+                  color: "#FFF",
+                  padding: "12px 24px",
+                  fontSize: "16px",
+                  "&:hover": {
+                    backgroundColor: "#08005B",
+                  },
+                }}
+              >
+                Cadastro
+              </Button>
+            </Link>
+          </div>
         </Box>
       </Box>
     </ThemeProvider>
@@ -407,12 +408,6 @@ const muiStyles = {
     "&.Mui-focused fieldset": {
       borderColor: "#08005B",
     },
-  },
-  "& .MuiInputLabel-root": {
-    color: "#08005B",
-  },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "#08005B",
   },
 };
 
