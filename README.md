@@ -1,28 +1,29 @@
+
 # 📘 Gestão de Oficina Mecânica
 
 ## 📌 Sumário
-- [Visão Geral do Projeto](#📌-visão-geral-do-projeto)
-- [Arquitetura do Sistema](#⚙️-arquitetura-do-sistema)
-- [Tecnologias Utilizadas](#🛠-tecnologias-utilizadas)
+- [Visão Geral do Projeto](#visão-geral-do-projeto)
+- [Arquitetura do Sistema](#arquitetura-do-sistema)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Frontend](#frontend)
-- [Configuração e Execução do Projeto ](#🚀-configuração-e-execução-do-projeto)
-- [Endpoints da API](#📄-endpoints-da-api)
-- [Estrutura do Projeto](#📂-estrutura-do-projeto)
-- [Fluxo do Sistema Cadastro](#🔍-fluxo-do-sistema-cadastro)
-- [Fluxo do Sistema Edição](#🔍-fluxo-do-sistema-edição)
-- [Boas Práticas e Padrões](#🛠-boas-práticas-e-padrões)
-- [Contato](#📚-contato)
+- [Configuração e Execução do Projeto](#configuração-e-execução-do-projeto)
+- [Endpoints da API](#endpoints-da-api)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Fluxo do Sistema Cadastro](#fluxo-do-sistema-cadastro)
+- [Fluxo do Sistema Edição](#fluxo-do-sistema-edição)
+- [Boas Práticas e Padrões](#boas-práticas-e-padrões)
+- [Contato](#contato)
 
 ---
 
-## 📌 Visão Geral do Projeto
+## Visão Geral do Projeto
 O sistema de **Gestão de Oficina Mecânica** tem como objetivo facilitar o gerenciamento de clientes, veículos, ordens de serviço e funcionários, proporcionando eficiência no atendimento e na execução dos serviços.
 
 O projeto segue uma arquitetura baseada em **microserviços**, utilizando tecnologias modernas para garantir escalabilidade e performance.
 
 ---
 
-## ⚙️ Arquitetura do Sistema
+## Arquitetura do Sistema
 O sistema é composto pelos seguintes microserviços:
 - **Clientes API**: Cadastro e gerenciamento de clientes.
 - **Veículos API**: Controle de veículos associados a clientes.
@@ -34,7 +35,7 @@ A comunicação entre os serviços ocorre via **REST API**, utilizando **Axios**
 ![microservice](docs/microservice.drawio.png)
 
 ---
-## 📊 Diagrama de Entidade-Relacionamento (DER)
+## Diagrama de Entidade-Relacionamento (DER)
 O Diagrama de Entidade-Relacionamento (DER) do sistema de Gestão de Oficina Mecânica modela a estrutura do banco de dados e as relações entre os principais elementos do sistema:
 
 Clientes: Armazena dados pessoais e a quantidade de veículos do cliente.
@@ -44,14 +45,15 @@ Funcionários: Representam os mecânicos e técnicos responsáveis pelos serviç
 
 ![DER](docs/DER.drawio%20(2).png)
 
-## 🔗 Relacionamentos
+## Relacionamentos
 
 Um cliente pode possuir vários veículos.
 Cada veículo pode ter apenas uma ordem de serviço ativa.
 Uma ordem de serviço pode ter vários funcionários trabalhando nela.
 
 ---
-## 🛠 Tecnologias Utilizadas
+
+## Tecnologias Utilizadas
 - **Frontend**: React, Next.js, Material UI
 - **Backend**: Java, Spring Boot
 - **Banco de Dados**: PostgreSQL
@@ -106,7 +108,7 @@ Na tela de edição, segue o mesmo padrão de estilo, com o primeiro campo sendo
 A tabela exibe no máximo 5 cadastros por página. Após esse limite, uma nova página é gerada, e em cada página há a opção de apagar os dados.
 ![Tabela](docs/Captura%20de%20tela%202025-01-31%20151112.png)
 
-## 🚀 Configuração e Execução do Projeto
+## Configuração e Execução do Projeto
 ### 1️⃣ **Clone o Repositório**  
 Primeiro, baixe o código-fonte do projeto executando o seguinte comando no terminal:  
 
@@ -147,7 +149,7 @@ http://localhost:3000/inicio
 
 ---
 
-## 📄 Endpoints da API
+## Endpoints da API
 
 ### **Clientes API**
 | Método | Endpoint              | Descrição                  |
@@ -188,7 +190,7 @@ http://localhost:3000/inicio
 ---
 
 
-## **📂 Estrutura do Projeto**
+## Estrutura do Projeto
 
 #### **Backend (Java/Spring Boot)**
 ```
@@ -221,7 +223,7 @@ http://localhost:3000/inicio
 
 ---
 
-## 🔍 Fluxo do Sistema Cadastro
+## Fluxo do Sistema Cadastro
 1. Cadastro de clientes
 2. Cadastro de veículos
 3. Cadastro de ordens de serviço
@@ -231,7 +233,7 @@ http://localhost:3000/inicio
 
 ---
 
-## 🔍 Fluxo do Sistema Edição
+## Fluxo do Sistema Edição
 1. Edição de clientes
 2. Edição de veículos
 3. Edição de ordens de serviço
@@ -241,14 +243,14 @@ http://localhost:3000/inicio
 
 ---
 
-## 🛠 Boas Práticas e Padrões
+## Boas Práticas e Padrões
 - Código limpo e modular
 - Uso de controllers, services e repositories no backend
 - Versionamento com Git
 
 ---
 
-## 📚 Contato
+## Contato
 - **[Linkedin](https://www.linkedin.com/in/victor-augusto-2b01a71a6/)** 
 
 ---
